@@ -29,21 +29,13 @@ $string['pluginname'] = 'Sciebo authentication';
 $string['cachedef_foldername'] = 'Folder name cache';
 $string['clientid'] = 'Client ID';
 $string['clientid_desc'] = 'Beschreibung für ClientID';
-$string['oauthinfo'] = 'some important installing sentence';
 $string['secret'] = 'Sciebo Secret';
 $string['sciebo:view'] = 'View a Sciebo folder';
 $string['required'] = 'Required';
 $string['pluginname_help'] = 'A Sciebo authentication admin tool';
-$string['clientid'] = 'Client ID';
-$string['secret'] = 'Secret';
 $string['oauthsciebo'] = 'To use this plugin, you must register your site with Sciebo.
 As part of the registration process, you will need to enter the following URL as \'Redirect domain\': {$a}
 Once registered, you will be provided with a client ID and secret which can be entered here.';
-$string['notitle'] = 'notitle';
-$string['remember'] = 'Remember me';
 $string['pluginname'] = 'Sciebo authentication';
 $string['apikey'] = 'Sciebo authentication API key';
-// $string['instruction'] = 'You can get your API Key and secret from <a href="http://www.dropbox.com/developers/apps">Dropbox developers</a>. When setting up your key please select "Full Dropbox" as the "Access level".';
-// $string['cachelimit'] = 'Cache limit';
-// $string['cachelimit_info'] = 'Enter the maximum size of files (in bytes) to be cached on server for Dropbox aliases/shortcuts. Cached files will be served when the source is no longer available. Empty value or zero mean caching of all files regardless of size.';
 $string['oauth2redirecturi'] = 'OAuth 2 Redirect URI';

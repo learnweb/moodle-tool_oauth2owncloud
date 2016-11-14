@@ -26,9 +26,9 @@
 
 
 $capabilities = array(
-    'tool/oauth2sciebo:view' => array(  // view ?
-        'captype' => 'read',            // read , write ?
-        'contextlevel' => CONTEXT_MODULE,   // CONTEXT_SYSTEM ?
+    'tool/oauth2sciebo:view' => array(
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_MODULE,
         'archetypes' => array(
             'manager' => CAP_ALLOW
         )

@@ -16,7 +16,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version.php for oauth2sciebo admin tool
+ * index.php for oauth2sciebo admin tool
  *
  * @package    tool_oauth2sciebo
  * @copyright  2016 Westfälische Wilhelms-Universität Münster (WWU Münster)

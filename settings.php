@@ -25,28 +25,27 @@
 defined('MOODLE_INTERNAL') || die('moodle_internal not defined');
 
 if ($hassiteconfig) {
-    $temp = new admin_settingpage('oauth2sciebo', new lang_string('pluginname', 'tool_oauth2sciebo'));
 
-    $temp ->add(new admin_setting_heading('coursebank_proxy_head',
+    $temp = new admin_settingpage('oauth2sciebo',
+        new lang_string('pluginname', 'tool_oauth2sciebo'));
+
+    $temp->add(new admin_setting_heading('oauth2sciebo_head',
         get_string('configplugin', 'tool_oauth2sciebo'),
-        ''
-        ));
+        ''));
 
-    $image = '<a href="http://www.sciebo.de" target="_new"><img src="' .
+/**    $image = '<a href="http://www.sciebo.de" target="_new"><img src="' .
         $OUTPUT->pix_url('icon', 'tool_oauth2sciebo') . '" /></a>&nbsp;&nbsp;&nbsp;';
+ */
 
-
-    $temp ->add(new admin_setting_configtext('tool_oauth2sciebo/clientid',
+    $temp->add(new admin_setting_configtext('tool_oauth2sciebo/clientid',
         get_string('clientid', 'tool_oauth2sciebo'),
-        ''
-        ));
+        ''));
 
-    $temp ->add(new admin_setting_configtext('tool_oauth2sciebo/secret',
+    $temp->add(new admin_setting_configtext('tool_oauth2sciebo/secret',
         get_string('secret', 'tool_oauth2sciebo'),
-        get_string('oauthsciebo' , 'tool_oauth2sciebo'),
-        ''
-        ));
+        get_string('oauthsciebo', 'tool_oauth2sciebo'),
+        ''));
 
     $ADMIN->add('tools', $temp);
-}
 
+}
