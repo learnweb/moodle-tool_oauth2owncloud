@@ -15,19 +15,19 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
-* Version.php for oauth2sciebo admin tool
-*
-* @package    tool_oauth2sciebo
-* @copyright  2016 Westfälische Wilhelms-Universität Münster (WWU Münster)
-* @author     Projektseminar Uni Münster
-* @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
-*/
+ * Version.php for oauth2sciebo admin tool
+ *
+ * @package    tool_oauth2sciebo
+ * @copyright  2016 Westfälische Wilhelms-Universität Münster (WWU Münster)
+ * @author     Projektseminar Uni Münster
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 defined('MOODLE_INTERNAL') || die('moodle_internal not defined');
 
 if ($hassiteconfig) {
     $temp = new admin_settingpage('oauth2sciebo', new lang_string('pluginname', 'tool_oauth2sciebo'));
 
-    $temp ->add(new admin_setting_heading('coursebank_proxy_head',
+    $temp->add(new admin_setting_heading('coursebank_proxy_head',
         get_string('configplugin', 'tool_oauth2sciebo'),
         ''
         ));
@@ -36,12 +36,12 @@ if ($hassiteconfig) {
         $OUTPUT->pix_url('icon', 'tool_oauth2sciebo') . '" /></a>&nbsp;&nbsp;&nbsp;';
 
 
-    $temp ->add(new admin_setting_configtext('tool_oauth2sciebo/clientid',
+    $temp->add(new admin_setting_configtext('tool_oauth2sciebo/clientid',
         get_string('clientid', 'tool_oauth2sciebo'),
         '', ''
         ));
 
-    $temp ->add(new admin_setting_configtext('tool_oauth2sciebo/secret',
+    $temp->add(new admin_setting_configtext('tool_oauth2sciebo/secret',
         get_string('secret', 'tool_oauth2sciebo'),
         get_string('oauthsciebo' , 'tool_oauth2sciebo'),
         '', ''
