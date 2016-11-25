@@ -38,15 +38,15 @@ if ($hassiteconfig) {
 
     $temp ->add(new admin_setting_configtext('tool_oauth2sciebo/clientid',
         get_string('clientid', 'tool_oauth2sciebo'),
-        ''
+        '', ''
         ));
 
     $temp ->add(new admin_setting_configtext('tool_oauth2sciebo/secret',
         get_string('secret', 'tool_oauth2sciebo'),
         get_string('oauthsciebo' , 'tool_oauth2sciebo'),
-        ''
+        '', ''
         ));
 
-    $ADMIN->add('tools', $temp);
+    $ADMIN->add('authsettings', $temp);
 }
 
