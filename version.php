@@ -25,7 +25,10 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$plugin->component = 'tool_oauth2sciebo'; // Full name of the plugin (used for diagnostics).
 $plugin->version   = 2016111100;        // The current plugin version (Date: YYYYMMDDXX).
+$plugin->release = 'v0.0';
 $plugin->requires  = 2016051900;        // Requires this Moodle version.
-$plugin->component = 'tool_oauth2sciebo';     // Full name of the plugin (used for diagnostics).
 $plugin->maturity = MATURITY_ALPHA;
+$plugin->cron = 0;
+$plugin->dependencies = array();

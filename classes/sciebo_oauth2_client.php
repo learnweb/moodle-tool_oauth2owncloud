@@ -22,10 +22,11 @@
  * @author     Projektseminar Uni Münster
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+// Supposed to make require once in other files later unnecessary.
 
+namespace tool_oauth2sciebo;
 
 defined('MOODLE_INTERNAL') || die();
-require_once($CFG->libdir . '/oauthlib.php');
 
 class sciebo_oauth2_client extends oauth2_client {
     public function token_url() {
