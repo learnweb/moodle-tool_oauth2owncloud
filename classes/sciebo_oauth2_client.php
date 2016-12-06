@@ -89,15 +89,14 @@ class sciebo_oauth2_client extends oauth2_client {
 
     /**
      * Callback url where the request is returned to.
-     *
+     * TODO need for own callback_url
      * @return moodle_url url of callback
      */
-// TODO need for own callback_url
-    /*public static function callback_url() {
+    public static function callback_url() {
         global $CFG;
 
         return new moodle_url('/admin/oauth2callback.php');
-    }*/
+    }
 
     /**
      * Returns the login link for this oauth request
@@ -125,16 +124,16 @@ class sciebo_oauth2_client extends oauth2_client {
      * @param string $code the code returned from the oauth authenticaiton
      * @return boolean true if token is upgraded succesfully
      */
-    /*public function upgrade_token($code) {
+    public function upgrade_token($code) {
 
-    }*/
+    }
 
     /**
      * Logs out of a oauth request, clearing any stored tokens
      */
-    /*public function log_out() {
+    public function log_out() {
         $this->store_token(null);
-    }*/
+    }
 
     /**
      * Make a HTTP request, adding the access token we have
@@ -143,7 +142,7 @@ class sciebo_oauth2_client extends oauth2_client {
      * @param array $options
      * @return bool
      */
-    /*protected function request($url, $options = array()) {
+    protected function request($url, $options = array()) {
         $murl = new moodle_url($url);
 
         if ($this->accesstoken) {
@@ -156,7 +155,7 @@ class sciebo_oauth2_client extends oauth2_client {
         }
 
         return parent::request($murl->out(false), $options);
-    }*/
+    }
 
     /**
      * Multiple HTTP Requests
@@ -166,12 +165,12 @@ class sciebo_oauth2_client extends oauth2_client {
      * @param array $options An array of options to set
      * @return array An array of results
      */
-   /* protected function multi($requests, $options = array()) {
+    protected function multi($requests, $options = array()) {
         if ($this->accesstoken) {
             $this->setHeader('Authorization: Bearer '.$this->accesstoken->token);
         }
         return parent::multi($requests, $options);
-    }*/
+    }
 
     /**
      * Returns the tokenname for the access_token to be stored
@@ -182,10 +181,10 @@ class sciebo_oauth2_client extends oauth2_client {
      *
      * @return string tokenname for prefernce storage
      */
-    /*protected function get_tokenname() {
+    protected function get_tokenname() {
         // This is unusual but should work for most purposes.
         return get_class($this).'-'.md5($this->scope);
-    }*/
+    }
 
     /**
      * Store a token between requests. Currently uses
@@ -193,7 +192,7 @@ class sciebo_oauth2_client extends oauth2_client {
      *
      * @param stdClass|null $token token object to store or null to clear
      */
-   /* protected function store_token($token) {
+    protected function store_token($token) {
         global $SESSION;
 
         $this->accesstoken = $token;
@@ -204,14 +203,14 @@ class sciebo_oauth2_client extends oauth2_client {
         } else {
             unset($SESSION->{$name});
         }
-    }*/
+    }
 
     /**
      * Retrieve a token stored.
      *
      * @return stdClass|null token object
      */
-    /*protected function get_stored_token() {
+    protected function get_stored_token() {
         global $SESSION;
 
         $name = $this->get_tokenname();
@@ -221,7 +220,7 @@ class sciebo_oauth2_client extends oauth2_client {
         }
 
         return null;
-    }*/
+    }
 
     /**
      * Get access token.
@@ -230,9 +229,9 @@ class sciebo_oauth2_client extends oauth2_client {
      *
      * @return string
      */
-   /* public function get_accesstoken() {
+    public function get_accesstoken() {
         return $this->accesstoken;
-    }*/
+    }
 
     /**
      * Get the client ID.
@@ -241,9 +240,9 @@ class sciebo_oauth2_client extends oauth2_client {
      *
      * @return string
      */
-   /* public function get_clientid() {
+    public function get_clientid() {
         return $this->clientid;
-    }*/
+    }
 
     /**
      * Get the client secret.
@@ -252,9 +251,9 @@ class sciebo_oauth2_client extends oauth2_client {
      *
      * @return string
      */
-   /* public function get_clientsecret() {
+    public function get_clientsecret() {
         return $this->clientsecret;
-    }*/
+    }
 
     /**
      * Should HTTP GET be used instead of POST?
@@ -263,7 +262,7 @@ class sciebo_oauth2_client extends oauth2_client {
      *
      * @return bool true if GET should be used
      */
-    /*protected function use_http_get() {
+    protected function use_http_get() {
         return false;
-    }*/
+    }
 }
