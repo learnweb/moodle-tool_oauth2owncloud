@@ -32,22 +32,63 @@ if ($hassiteconfig) {
         ''
         ));
 
-    $image = '<a href="http://www.sciebo.de" target="_new"><img src="' .
-        $OUTPUT->pix_url('icon', 'tool_oauth2sciebo') . '" /></a>&nbsp;&nbsp;&nbsp;';
-
-
     $temp->add(new admin_setting_configtext('tool_oauth2sciebo/clientid',
         get_string('clientid', 'tool_oauth2sciebo'),
         '', ''
         ));
 
-    $sth = 'sth';
     $temp->add(new admin_setting_configtext('tool_oauth2sciebo/secret',
         get_string('secret', 'tool_oauth2sciebo'),
-        get_string('oauthsciebo' , 'tool_oauth2sciebo', $sth),
-        ''
+        '', ''
         ));
 
+    $temp->add(new admin_setting_configtext('tool_oauth2sciebo/auth_url',
+        get_string('auth_url', 'tool_oauth2sciebo'),
+        '', ''
+    ));
+
+    $temp->add(new admin_setting_configtext('tool_oauth2sciebo/token_url',
+        get_string('token_url', 'tool_oauth2sciebo'),
+        '', ''
+    ));
+
+    $temp->add(new admin_setting_configtext('tool_oauth2sciebo/server',
+        get_string('server', 'tool_oauth2sciebo'),
+        '', ''
+    ));
+
+    $temp->add(new admin_setting_configtext('tool_oauth2sciebo/path',
+        get_string('path', 'tool_oauth2sciebo'),
+        '', ''
+    ));
+
+    $temp->add(new admin_setting_configtext('tool_oauth2sciebo/user',
+        get_string('user', 'tool_oauth2sciebo'),
+        '', ''
+    ));
+
+    $temp->add(new admin_setting_configpasswordunmask('tool_oauth2sciebo/pass',
+        get_string('pass', 'tool_oauth2sciebo'),
+        '', ''
+    ));
+
+    $temp->add(new admin_setting_configtext('tool_oauth2sciebo/port',
+        get_string('port', 'tool_oauth2sciebo'),
+        '', ''
+    ));
+
+
+    $temp->add(new admin_setting_configselect('tool_oauth2sciebo/auth',
+        get_string('auth', 'tool_oauth2sciebo'),
+        '', '', array('basic' => 'Basic', 'bearer' => 'Bearer')
+    ));
+
+    $temp->add(new admin_setting_configselect('tool_oauth2sciebo/type',
+        get_string('type', 'tool_oauth2sciebo'),
+        '', '', array('http' => 'HTTP', 'https' => 'HTTPS')
+    ));
+
+    // Where shall the settings be visible? Authsettings.
     $ADMIN->add('authsettings', $temp);
 }
 
