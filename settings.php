@@ -16,7 +16,8 @@
 
 /**
  * Version.php for oauth2sciebo admin tool
- *
+ * TODO: Evaluate the required settings. Which of them can be generated automatically?
+ * TODO: Do we have to support Basic Authentication?
  * @package    tool_oauth2sciebo
  * @copyright  2016 Westfälische Wilhelms-Universität Münster (WWU Münster)
  * @author     Projektseminar Uni Münster
