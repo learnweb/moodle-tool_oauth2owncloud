@@ -43,16 +43,6 @@ if ($hassiteconfig) {
         '', ''
         ));
 
-    $temp->add(new admin_setting_configtext('tool_oauth2sciebo/auth_url',
-        get_string('auth_url', 'tool_oauth2sciebo'),
-        '', ''
-    ));
-
-    $temp->add(new admin_setting_configtext('tool_oauth2sciebo/token_url',
-        get_string('token_url', 'tool_oauth2sciebo'),
-        '', ''
-    ));
-
     $temp->add(new admin_setting_configtext('tool_oauth2sciebo/server',
         get_string('server', 'tool_oauth2sciebo'),
         '', ''
@@ -63,25 +53,9 @@ if ($hassiteconfig) {
         '', ''
     ));
 
-    $temp->add(new admin_setting_configtext('tool_oauth2sciebo/user',
-        get_string('user', 'tool_oauth2sciebo'),
-        '', ''
-    ));
-
-    $temp->add(new admin_setting_configpasswordunmask('tool_oauth2sciebo/pass',
-        get_string('pass', 'tool_oauth2sciebo'),
-        '', ''
-    ));
-
     $temp->add(new admin_setting_configtext('tool_oauth2sciebo/port',
         get_string('port', 'tool_oauth2sciebo'),
         '', ''
-    ));
-
-
-    $temp->add(new admin_setting_configselect('tool_oauth2sciebo/auth',
-        get_string('auth', 'tool_oauth2sciebo'),
-        '', '', array('basic' => 'Basic', 'bearer' => 'Bearer')
     ));
 
     $temp->add(new admin_setting_configselect('tool_oauth2sciebo/type',

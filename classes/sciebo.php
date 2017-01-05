@@ -48,7 +48,7 @@ class sciebo extends \oauth2_client {
         if (empty(get_config('tool_oauth2sciebo', 'server'))) {
             return;
         }
-        if (empty(get_config('tool_oauth2sciebo', 'type'))) {
+        if ('http' == (get_config('tool_oauth2sciebo', 'type'))) {
             $this->webdav_type = '';
         } else {
             $this->webdav_type = 'ssl://';
@@ -64,8 +64,7 @@ class sciebo extends \oauth2_client {
         }
 
         $this->dav = new sciebo_client(get_config('tool_oauth2sciebo', 'server'),
-            get_config('tool_oauth2sciebo', 'user'), get_config('tool_oauth2sciebo', 'pass'),
-            get_config('tool_oauth2sciebo', 'auth'), $this->webdav_type);
+            '', '', 'bearer', $this->webdav_type);
         $this->dav->port = $this->webdav_port;
         $this->dav->debug = false;
     }
@@ -76,7 +75,9 @@ class sciebo extends \oauth2_client {
      */
     protected function auth_url() {
         // Dynamically generated from the admin tool settings.
-        return get_config('tool_oauth2sciebo', 'auth_url');
+        $path = str_replace('remote.php/webdav/', '', get_config('tool_oauth2sciebo', 'path'));
+        return get_config('tool_oauth2sciebo', 'type') . '://' . get_config('tool_oauth2sciebo', 'server') . '/' . $path
+               . 'index.php/apps/oauth2/authorize';
     }
 
     /**
@@ -84,7 +85,9 @@ class sciebo extends \oauth2_client {
      * @return string the auth url
      */
     protected function token_url() {
-        return get_config('tool_oauth2sciebo', 'token_url');
+        $path = str_replace('remote.php/webdav/', '', get_config('tool_oauth2sciebo', 'path'));
+        return get_config('tool_oauth2sciebo', 'type') . '://' . get_config('tool_oauth2sciebo', 'server')  . '/' . $path
+               . 'index.php/apps/oauth2/api/v1/token';
     }
 
     /**
@@ -109,8 +112,7 @@ class sciebo extends \oauth2_client {
         $this->is_logged_in();
     }
 
-    public function post($url, $params = '', $options = array())
-    {
+    public function post($url, $params = '', $options = array()) {
         // A basic auth header has to be added to the request in order to provide the necessary user
         // credentials to the ownCloud interface.
         $this->setHeader(array(
