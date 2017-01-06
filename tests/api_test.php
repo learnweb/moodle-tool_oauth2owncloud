@@ -27,33 +27,69 @@ defined('MOODLE_INTERNAL') || die();
 
 class tool_oauth2sciebo_api_testcase extends advanced_testcase {
 
-    protected function set_up() {
-        // Recommended in Moodle docs to always include CFG.
-        global $CFG;
-        $generator = $this->getDataGenerator()->get_plugin_generator('tool_oauth2sciebo');
-        $data = $generator->test_create_preparation();
+    /**
+     * The sciebo class is initialized and the required settings are set beforehand.
+     */
+    protected function setUp() {
         $this->resetAfterTest(true);
-        return $data;
+
+        // Setup some settings required for the Client.
+        set_config('clientid', 'testid', 'tool_oauth2sciebo');
+        set_config('secret', 'testsecret', 'tool_oauth2sciebo');
+        set_config('server', 'localhost', 'tool_oauth2sciebo');
+        set_config('path', 'owncloud/remote.php/webdav/', 'tool_oauth2sciebo');
+        set_config('port', '', 'tool_oauth2sciebo');
+        set_config('type', 'https', 'tool_oauth2sciebo');
+
+        // Dummy callback URL.
+        $returnurl = new moodle_url('/repository/repository_callback.php', [
+                'callback'  => 'yes',
+                'repo_id'   => 0,
+                'sesskey'   => sesskey(),
+        ]);
+
+        $this->client = new \tool_oauth2sciebo\sciebo($returnurl);
     }
 
-    public function test_test() {
+    /**
+     * The addition of the basic auth. header for the curl request is checked.
+     */
+    public function test_post_header() {
+        $this->resetAfterTest(true);
+
+        $this->client->post('https://somepath.com/token');
+
+        $header = $this->client->header[0];
+        $expected ='Authorization: Basic ' . base64_encode($this->client->get_clientid() . ':' . $this->client->get_clientsecret());
+
+        $this->assertEquals($header, $expected);
+    }
+
+    /**
+     * The dynamic generation of auth_url and token_url is tested.
+     * TODO: Use Reflection of sciebo to access protected methods.
+     */
+    public function test_urls() {
+        $this->resetAfterTest(true);
+
+        $this->assertEquals('https://localhost/owncloud/index.php/apps/oauth2/authorize', $this->client->auth_url());
+        $this->assertEquals('https://localhost/owncloud/index.php/apps/oauth2/api/v1/token', $this->client->auth_url());
+    }
+
+    /**
+     * It is tested, whether the client configuration settings are appropriate and as expected.
+     * TODO: Implement the test.
+     */
+    public function test_settings_checker() {
         $this->assertEquals(1, 1);
     }
-    /**
-     * Methodes recommended by moodle to assure database and dataroot is reset.
-     */
-    public function test_deleting() {
-        global $DB;
-        $this->resetAfterTest(true);
-        $DB->delete_records('user');
-        $this->assertEmpty($DB->get_records('user'));
-    }
-    /**
-     * Methodes recommended by moodle to assure database is reset.
-     */
-    public function test_user_table_was_reset() {
-        global $DB;
-        $this->assertEquals(2, $DB->count_records('user', array()));
-    }
 
+    /**
+     * The addition of the bearer auth. header for token based authentication is tested.
+     * TODO: Implement the test.
+     * TODO: Maybe Reflections could work.
+     */
+    public function test_webdav_changes() {
+        $this->assertEquals(1, 1);
+    }
 }

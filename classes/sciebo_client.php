@@ -1336,6 +1336,10 @@ EOD;
         }
     }
 
+    /**
+     * Setter method for the Access Token, which is stored within the client.
+     * @param $token Access Token, which has to be stored.
+     */
     public function set_token($token) {
         $this->_token = $token;
     }
