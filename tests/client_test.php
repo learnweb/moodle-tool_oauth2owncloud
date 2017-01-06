@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-class tool_oauth2sciebo_api_testcase extends advanced_testcase {
+class tool_oauth2sciebo_client_testcase extends advanced_testcase {
 
     /**
      * The sciebo class is initialized and the required settings are set beforehand.
@@ -67,13 +67,14 @@ class tool_oauth2sciebo_api_testcase extends advanced_testcase {
 
     /**
      * The dynamic generation of auth_url and token_url is tested.
-     * TODO: Use Reflection of sciebo to access protected methods.
      */
     public function test_urls() {
         $this->resetAfterTest(true);
 
-        $this->assertEquals('https://localhost/owncloud/index.php/apps/oauth2/authorize', $this->client->auth_url());
-        $this->assertEquals('https://localhost/owncloud/index.php/apps/oauth2/api/v1/token', $this->client->auth_url());
+        $this->assertEquals('https://localhost/owncloud/index.php/apps/oauth2/authorize',
+                $this->get_method_sciebo('auth_url')->invokeArgs($this->client, array()));
+        $this->assertEquals('https://localhost/owncloud/index.php/apps/oauth2/api/v1/token',
+                $this->get_method_sciebo('token_url')->invokeArgs($this->client, array()));
     }
 
     /**
@@ -87,9 +88,23 @@ class tool_oauth2sciebo_api_testcase extends advanced_testcase {
     /**
      * The addition of the bearer auth. header for token based authentication is tested.
      * TODO: Implement the test.
-     * TODO: Maybe Reflections could work.
+     * TODO: Maybe Reflections could work?
      */
     public function test_webdav_changes() {
+        // Create reflection and initialize object -> call create_basic_request ->
+        // check the request headers for bearer auth header.
         $this->assertEquals(1, 1);
+    }
+
+    /**
+     * Helper method to access a specific pretected or private method from the class sciebo.
+     * @param $name name of the method.
+     * @return ReflectionMethod exact method.
+     */
+    protected function get_method_sciebo($name) {
+        $tmp = new ReflectionClass(\tool_oauth2sciebo\sciebo::class);
+        $method = $tmp->getMethod($name);
+        $method->setAccessible(true);
+        return $method;
     }
 }
