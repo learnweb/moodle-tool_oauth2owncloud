@@ -1330,7 +1330,7 @@ EOD;
             if ($signature = $this->digest_signature($method)) {
                 $this->header_add($signature);
             }
-        // Our local WebDav client is adjusted to also be able send Bearer Authorization headers.
+        // Our local WebDav client is adjusted to enable it to send Bearer Authorization headers.
         } else if ($this->_auth == 'bearer') {
             $this->header_add(sprintf('Authorization: Bearer %s', $this->_token));
         }
