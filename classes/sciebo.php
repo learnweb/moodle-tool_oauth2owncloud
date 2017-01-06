@@ -28,12 +28,13 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/oauthlib.php');
 
-use tool_oauth2sciebo\sciebo_client;
-
 class sciebo extends \oauth2_client {
 
     /**
-     * Create the DropBox API Client.
+     * Create the ownCloud OAuth 2.0 and WebDAV clients. The required data for both clients is fetched from the
+     * oauth2sciebo admin settings entered before by the user.
+     *
+     * TODO: Handle missing or false settings, since they are not checked when filled out by the user.
      *
      * @param   string      $key        The API key
      * @param   string      $secret     The API secret
@@ -43,8 +44,6 @@ class sciebo extends \oauth2_client {
         parent::__construct(get_config('tool_oauth2sciebo', 'clientid'),
             get_config('tool_oauth2sciebo', 'secret'), $callback, '');
 
-        // Entered WebDav configuration.
-        // The required data is now fetched from the oauth2sciebo Admin tool.
         if (empty(get_config('tool_oauth2sciebo', 'server'))) {
             return;
         }

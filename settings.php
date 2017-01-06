@@ -16,13 +16,13 @@
 
 /**
  * Version.php for oauth2sciebo admin tool
- * TODO: Evaluate the required settings. Which of them can be generated automatically?
- * TODO: Do we have to support Basic Authentication?
+ *
  * @package    tool_oauth2sciebo
  * @copyright  2016 Westfälische Wilhelms-Universität Münster (WWU Münster)
  * @author     Projektseminar Uni Münster
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 defined('MOODLE_INTERNAL') || die('moodle_internal not defined');
 
 if ($hassiteconfig) {
