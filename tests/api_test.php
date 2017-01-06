@@ -25,8 +25,33 @@
 
 class tool_oauth2sciebo_api_testcase extends advanced_testcase {
 
+    protected function set_up() {
+        // Recommended in Moodle docs to always include CFG.
+        global $CFG;
+        $generator = $this->getDataGenerator()->get_plugin_generator('tool_oauth2sciebo');
+        $data = $generator->test_create_preparation();
+        $this->resetAfterTest(true);
+        return $data;
+    }
+
     public function test_test() {
         $this->assertEquals(1, 1);
+    }
+    /**
+     * Methodes recommended by moodle to assure database and dataroot is reset.
+     */
+    public function test_deleting() {
+        global $DB;
+        $this->resetAfterTest(true);
+        $DB->delete_records('user');
+        $this->assertEmpty($DB->get_records('user'));
+    }
+    /**
+     * Methodes recommended by moodle to assure database is reset.
+     */
+    public function test_user_table_was_reset() {
+        global $DB;
+        $this->assertEquals(2, $DB->count_records('user', array()));
     }
 
 }
