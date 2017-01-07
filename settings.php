@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version.php for oauth2sciebo admin tool
+ * Settings.php for oauth2sciebo admin tool. Registrates the redirection to the external setting page.
  *
  * @package    tool_oauth2sciebo
  * @copyright  2016 Westfälische Wilhelms-Universität Münster (WWU Münster)
@@ -25,45 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die('moodle_internal not defined');
 
-if ($hassiteconfig) {
-    $temp = new admin_settingpage('oauth2sciebo', new lang_string('pluginname', 'tool_oauth2sciebo'));
-
-    $temp->add(new admin_setting_heading('coursebank_proxy_head',
-        get_string('configplugin', 'tool_oauth2sciebo'),
-        ''
-        ));
-
-    $temp->add(new admin_setting_configtext('tool_oauth2sciebo/clientid',
-        get_string('clientid', 'tool_oauth2sciebo'),
-        '', ''
-        ));
-
-    $temp->add(new admin_setting_configtext('tool_oauth2sciebo/secret',
-        get_string('secret', 'tool_oauth2sciebo'),
-        '', ''
-        ));
-
-    $temp->add(new admin_setting_configtext('tool_oauth2sciebo/server',
-        get_string('server', 'tool_oauth2sciebo'),
-        '', ''
-    ));
-
-    $temp->add(new admin_setting_configtext('tool_oauth2sciebo/path',
-        get_string('path', 'tool_oauth2sciebo'),
-        '', ''
-    ));
-
-    $temp->add(new admin_setting_configtext('tool_oauth2sciebo/port',
-        get_string('port', 'tool_oauth2sciebo'),
-        '', ''
-    ));
-
-    $temp->add(new admin_setting_configselect('tool_oauth2sciebo/type',
-        get_string('type', 'tool_oauth2sciebo'),
-        '', '', array('http' => 'HTTP', 'https' => 'HTTPS')
-    ));
-
-    // Where shall the settings be visible? Authsettings.
-    $ADMIN->add('authsettings', $temp);
-}
-
+// Settings for the OAuth 2.0 and WebDAV clients are managed on an external page.
+$ADMIN->add('authsettings', new admin_externalpage('tool_oauth2sciebo/auth',
+        'Sciebo OAuth 2.0 Configuration',
+        "$CFG->wwwroot/$CFG->admin/tool/oauth2sciebo/index.php"));

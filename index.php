@@ -15,7 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * index.php for oauth2sciebo admin tool
+ * index.php for oauth2sciebo admin tool. The client settings are managed in here. The main advantage of this is, that the
+ * required settings are checked by the moodleform before saving them in the Admin Tree.
  *
  * @package    tool_oauth2sciebo
  * @copyright  2016 Westfälische Wilhelms-Universität Münster (WWU Münster)
@@ -24,8 +25,28 @@
  */
 
 require('../../../config.php');
+require('../../../lib/adminlib.php');
 require(__DIR__ . '/client_form.php');
 
-admin_externalpage_setup('tool_oauth2sciebo');
+admin_externalpage_setup('tool_oauth2sciebo/auth');
+
 echo $OUTPUT->header();
+
+$mform = new tool_oauth2sciebo_client_form();
+
+if ($mform->is_cancelled()) {
+    redirect(new moodle_url('/my/'));
+} else if ($fromform = $mform->get_data()) {
+    // If the settings were submitted and validated, they are saved into the Admin Tree to be accessible by the client.
+    set_config('clientid', $fromform->clientid, 'tool_oauth2sciebo');
+    set_config('secret', $fromform->secret, 'tool_oauth2sciebo');
+    set_config('server', $fromform->server, 'tool_oauth2sciebo');
+    set_config('path', $fromform->path, 'tool_oauth2sciebo');
+    set_config('port', $fromform->port, 'tool_oauth2sciebo');
+    set_config('type', $fromform->type, 'tool_oauth2sciebo');
+    redirect(new moodle_url('/my/'));
+}
+
+$mform->display();
+
 echo $OUTPUT->footer();

@@ -127,8 +127,6 @@ class sciebo extends \oauth2_client {
             'Authorization: Basic ' . base64_encode($this->get_clientid() . ':' . $this->get_clientsecret())
         ));
 
-        $header = $this->header;
-
         return parent::post($url, $params, $options);
     }
 }

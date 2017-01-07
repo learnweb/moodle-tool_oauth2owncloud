@@ -78,14 +78,6 @@ class tool_oauth2sciebo_client_testcase extends advanced_testcase {
     }
 
     /**
-     * It is tested, whether the client configuration settings are appropriate and as expected.
-     * TODO: Implement the test.
-     */
-    public function test_settings_checker() {
-        $this->assertEquals(1, 1);
-    }
-
-    /**
      * The addition of the bearer auth. header for token based authentication is tested.
      * TODO: Implement the test.
      * TODO: Maybe Reflections could work?
