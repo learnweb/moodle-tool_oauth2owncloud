@@ -39,12 +39,12 @@ class tool_oauth2sciebo_client_form extends moodleform {
         // Client ID:
         $mform->addElement('text', 'clientid', get_string('clientid', 'tool_oauth2sciebo'), array('size' => '64'));
         $mform->addRule('clientid', get_string('required'), 'required', null, 'client');
-        $mform->setDefault('clientid', '');
+        $mform->setDefault('clientid', $this->_customdata['clientid']);
         $mform->setType('clientid', PARAM_ALPHANUM);
         // Secret:
         $mform->addElement('passwordunmask', 'secret', get_string('secret', 'tool_oauth2sciebo'), array('size' => '64'));
         $mform->addRule('secret', get_string('required'), 'required', null, 'client');
-        $mform->setDefault('secret', '');
+        $mform->setDefault('secret', $this->_customdata['secret']);
         $mform->setType('secret', PARAM_ALPHANUM);
 
         // Second block of webdav specific options.
@@ -52,19 +52,19 @@ class tool_oauth2sciebo_client_form extends moodleform {
         // Server Address:
         $mform->addElement('text', 'server', get_string('server', 'tool_oauth2sciebo'), array('size' => '64'));
         $mform->addRule('server', get_string('required'), 'required', null, 'client');
-        $mform->setDefault('server', '');
+        $mform->setDefault('server', $this->_customdata['server']);
         $mform->setType('server', PARAM_HOST);
         // Path to webdav:
         $mform->addElement('text', 'path', get_string('path', 'tool_oauth2sciebo'), array('size' => '64'));
         $mform->addRule('path', get_string('required'), 'required', null, 'client');
-        $mform->setDefault('path', '');
+        $mform->setDefault('path', $this->_customdata['path']);
         $mform->setType('path', PARAM_PATH);
         // Type of server:
         $mform->addElement('select', 'type', get_string('type', 'tool_oauth2sciebo'), array('http' => 'HTTP', 'https' => 'HTTPS'));
         $mform->addRule('type', get_string('required'), 'required', null, 'client');
         // Port of server:
         $mform->addElement('text', 'port', get_string('port', 'tool_oauth2sciebo'), array('size' => '8'));
-        $mform->setDefault('port', '');
+        $mform->setDefault('port', $this->_customdata['port']);
         $mform->setType('port', PARAM_INT);
 
         $this->add_action_buttons();

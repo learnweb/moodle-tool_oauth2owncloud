@@ -32,7 +32,14 @@ admin_externalpage_setup('tool_oauth2sciebo/auth');
 
 echo $OUTPUT->header();
 
-$mform = new tool_oauth2sciebo_client_form();
+$mform = new tool_oauth2sciebo_client_form(null, array(
+        'clientid' => get_config('tool_oauth2sciebo', 'clientid'),
+        'secret' => get_config('tool_oauth2sciebo', 'secret'),
+        'server' => get_config('tool_oauth2sciebo', 'server'),
+        'path' => get_config('tool_oauth2sciebo', 'path'),
+        'type' => get_config('tool_oauth2sciebo', 'type'),
+        'port' => get_config('tool_oauth2sciebo', 'port')
+));
 
 if ($mform->is_cancelled()) {
     redirect(new moodle_url('/my/'));
