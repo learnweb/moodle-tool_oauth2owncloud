@@ -39,11 +39,13 @@ class tool_oauth2sciebo_client_form extends moodleform {
         // Client ID:
         $mform->addElement('text', 'clientid', get_string('clientid', 'tool_oauth2sciebo'), array('size' => '64'));
         $mform->addRule('clientid', get_string('required'), 'required', null, 'client');
+        $mform->addRule('clientid', get_string('err_alphanumeric'), 'alphanumeric', null, 'client');
         $mform->setDefault('clientid', $this->_customdata['clientid']);
         $mform->setType('clientid', PARAM_ALPHANUM);
         // Secret:
         $mform->addElement('passwordunmask', 'secret', get_string('secret', 'tool_oauth2sciebo'), array('size' => '64'));
         $mform->addRule('secret', get_string('required'), 'required', null, 'client');
+        $mform->addRule('secret', get_string('err_alphanumeric'), 'alphanumeric', null, 'client');
         $mform->setDefault('secret', $this->_customdata['secret']);
         $mform->setType('secret', PARAM_ALPHANUM);
 
@@ -62,10 +64,14 @@ class tool_oauth2sciebo_client_form extends moodleform {
         // Type of server:
         $mform->addElement('select', 'type', get_string('type', 'tool_oauth2sciebo'), array('http' => 'HTTP', 'https' => 'HTTPS'));
         $mform->addRule('type', get_string('required'), 'required', null, 'client');
+        $mform->setDefault('type', $this->_customdata['type']);
         // Port of server:
         $mform->addElement('text', 'port', get_string('port', 'tool_oauth2sciebo'), array('size' => '8'));
+        $mform->addRule('port', get_string('err_numeric'), 'numeric', null, 'client');
         $mform->setDefault('port', $this->_customdata['port']);
         $mform->setType('port', PARAM_INT);
+
+        $mform->addElement('submit', 'reset', 'Reset');
 
         $this->add_action_buttons();
     }
