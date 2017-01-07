@@ -24,5 +24,8 @@
  */
 
 require('../../../config.php');
+require(__DIR__ . '/client_form.php');
 
-// TODO: Some Features can be made available on this page. For example deleting the settings.
+admin_externalpage_setup('tool_oauth2sciebo');
+echo $OUTPUT->header();
+echo $OUTPUT->footer();
