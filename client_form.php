@@ -29,20 +29,20 @@ require('../../../lib/formslib.php');
 
 class tool_oauth2sciebo_client_form extends moodleform {
 
-    function definition() {
+    public function definition() {
         global $CFG;
 
         $mform = $this->_form;
 
         // First block of oauth2 specific options.
         $mform->addElement('header', 'oauth', get_string('oauthlegend', 'tool_oauth2sciebo'));
-        // Client ID:
+        // Client ID.
         $mform->addElement('text', 'clientid', get_string('clientid', 'tool_oauth2sciebo'), array('size' => '64'));
         $mform->addRule('clientid', get_string('required'), 'required', null, 'client');
         $mform->addRule('clientid', get_string('err_alphanumeric'), 'alphanumeric', null, 'client');
         $mform->setDefault('clientid', $this->_customdata['clientid']);
         $mform->setType('clientid', PARAM_ALPHANUM);
-        // Secret:
+        // Secret.
         $mform->addElement('passwordunmask', 'secret', get_string('secret', 'tool_oauth2sciebo'), array('size' => '64'));
         $mform->addRule('secret', get_string('required'), 'required', null, 'client');
         $mform->addRule('secret', get_string('err_alphanumeric'), 'alphanumeric', null, 'client');
@@ -51,21 +51,21 @@ class tool_oauth2sciebo_client_form extends moodleform {
 
         // Second block of webdav specific options.
         $mform->addElement('header', 'webdav', get_string('webdavlegend', 'tool_oauth2sciebo'));
-        // Server Address:
+        // Server Address.
         $mform->addElement('text', 'server', get_string('server', 'tool_oauth2sciebo'), array('size' => '64'));
         $mform->addRule('server', get_string('required'), 'required', null, 'client');
         $mform->setDefault('server', $this->_customdata['server']);
         $mform->setType('server', PARAM_HOST);
-        // Path to webdav:
+        // Path to webdav.
         $mform->addElement('text', 'path', get_string('path', 'tool_oauth2sciebo'), array('size' => '64'));
         $mform->addRule('path', get_string('required'), 'required', null, 'client');
         $mform->setDefault('path', $this->_customdata['path']);
         $mform->setType('path', PARAM_PATH);
-        // Type of server:
+        // Type of server.
         $mform->addElement('select', 'type', get_string('type', 'tool_oauth2sciebo'), array('http' => 'HTTP', 'https' => 'HTTPS'));
         $mform->addRule('type', get_string('required'), 'required', null, 'client');
         $mform->setDefault('type', $this->_customdata['type']);
-        // Port of server:
+        // Port of server.
         $mform->addElement('text', 'port', get_string('port', 'tool_oauth2sciebo'), array('size' => '8'));
         $mform->addRule('port', get_string('err_numeric'), 'numeric', null, 'client');
         $mform->setDefault('port', $this->_customdata['port']);
