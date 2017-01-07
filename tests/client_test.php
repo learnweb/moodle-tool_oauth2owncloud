@@ -60,7 +60,7 @@ class tool_oauth2sciebo_client_testcase extends advanced_testcase {
         $this->client->post('https://somepath.com/token');
 
         $header = $this->client->header[0];
-        $expected ='Authorization: Basic ' . base64_encode($this->client->get_clientid() . ':' . $this->client->get_clientsecret());
+        $expected = 'Authorization: Basic ' . base64_encode($this->client->get_clientid() . ':' . $this->client->get_clientsecret());
 
         $this->assertEquals($header, $expected);
     }
