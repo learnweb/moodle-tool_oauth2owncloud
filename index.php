@@ -25,4 +25,4 @@
 
 require('../../../config.php');
 
-/** TODO: Some Features can be made available on this page. For example deleting the settings. */
+// TODO: Some Features can be made available on this page. For example deleting the settings.

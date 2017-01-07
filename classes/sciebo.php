@@ -81,7 +81,7 @@ class sciebo extends \oauth2_client {
 
     /**
      * Returns the token url for OAuth 2.0 request
-     * @return string the auth url
+     * @return string the token url
      */
     protected function token_url() {
         $path = str_replace('remote.php/webdav/', '', get_config('tool_oauth2sciebo', 'path'));
@@ -90,33 +90,44 @@ class sciebo extends \oauth2_client {
     }
 
     /**
-     * The WebDav listing function is encapsulated into this helper function.
-     * @param $path
-     * @return array
+     * The WebDav listing function is encapsulated into this helper function. Before the WebDAV function is called,
+     * an Access Token is set within the Client to enable data transmission.
+     * @param $path relative path to the file or directory.
+     * @return array information about the file or directory.
      */
     public function get_listing($path) {
-        // The WebDav client needs to be able to hold an access token in order to enable
-        // authentification trough OAuth2.
         $this->dav->set_token($this->get_accesstoken()->token);
         return $this->dav->ls($path);
     }
 
-    public function get_file($arg1, $arg2) {
+    /**
+     * The WebDav function get_file is encapsulated into this helper function. Before the WebDAV function is called,
+     * an Access Token is set within the Client to enable data transmission.
+     * @param $source sourcepath of the file.
+     * @param $local local path in which the file shall be stored.
+     * @return bool true on success, false otherwise.
+     */
+    public function get_file($source, $local) {
         $this->dav->set_token($this->get_accesstoken()->token);
-        return $this->dav->get_file($arg1, $arg2);
+        return $this->dav->get_file($source, $local);
     }
 
+    /**
+     * Sets up a new Access Token after redirection from ownCloud. Therefore the old Token has to be discarded and a
+     * new one requested with the authorization code.
+     */
     public function callback() {
         $this->log_out();
         $this->is_logged_in();
     }
 
     public function post($url, $params = '', $options = array()) {
-        // A basic auth header has to be added to the request in order to provide the necessary user
-        // credentials to the ownCloud interface.
+        // A basic auth header has to be added to the request for client authentication in ownCloud.
         $this->setHeader(array(
             'Authorization: Basic ' . base64_encode($this->get_clientid() . ':' . $this->get_clientsecret())
         ));
+
+        $header = $this->header;
 
         return parent::post($url, $params, $options);
     }
