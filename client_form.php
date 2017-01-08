@@ -71,7 +71,8 @@ class tool_oauth2sciebo_client_form extends moodleform {
         $mform->setDefault('port', $this->_customdata['port']);
         $mform->setType('port', PARAM_INT);
 
-        $mform->addElement('submit', 'reset', 'Reset');
+        // For some reason the 'formnovalidate' attribute does not work.
+        $mform->addElement('submit', 'reset', 'Reset', 'formnovalidate=""');
 
         $this->add_action_buttons();
     }

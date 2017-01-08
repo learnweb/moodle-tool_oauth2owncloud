@@ -78,14 +78,13 @@ class sciebo extends \oauth2_client {
                 empty(get_config('tool_oauth2sciebo', 'secret')) ||
                 empty(get_config('tool_oauth2sciebo', 'server')) ||
                 empty(get_config('tool_oauth2sciebo', 'path')) ||
-                empty(get_config('tool_oauth2sciebo', 'type')) ||
-                empty(get_config('tool_oauth2sciebo', 'port'))) {
+                empty(get_config('tool_oauth2sciebo', 'type'))) {
 
             global $CFG, $OUTPUT;
             $link = $CFG->wwwroot.'/'.$CFG->admin.'/tool/oauth2sciebo/index.php';
 
             // Generates a link to the external admin setting page.
-            echo $OUTPUT->notification('<a href="'.$link.'">
+            echo $OUTPUT->notification('<a href="'.$link.'" target="_blank">
             '.get_string('missing_settings', 'tool_oauth2sciebo').'</a>', 'warning');
         }
     }
