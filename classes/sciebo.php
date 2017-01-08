@@ -69,6 +69,28 @@ class sciebo extends \oauth2_client {
     }
 
     /**
+     * Helper method, that checks the admin settings regarding the OAuth 2.0 and WebDAV clients required for this
+     * plugin. If at least one of the settings is empty, a warning is printed with a link which redirects to the
+     * external setting page of the plugin.
+     */
+    public function check_data() {
+        if (empty(get_config('tool_oauth2sciebo', 'clientid')) ||
+                empty(get_config('tool_oauth2sciebo', 'secret')) ||
+                empty(get_config('tool_oauth2sciebo', 'server')) ||
+                empty(get_config('tool_oauth2sciebo', 'path')) ||
+                empty(get_config('tool_oauth2sciebo', 'type')) ||
+                empty(get_config('tool_oauth2sciebo', 'port'))) {
+
+            global $CFG, $OUTPUT;
+            $link = $CFG->wwwroot.'/'.$CFG->admin.'/tool/oauth2sciebo/index.php';
+
+            // Generates a link to the external admin setting page.
+            echo $OUTPUT->notification('<a href="'.$link.'">
+            '.get_string('missing_settings', 'tool_oauth2sciebo').'</a>', 'warning');
+        }
+    }
+
+    /**
      * Returns the auth url for OAuth 2.0 request
      * @return string the auth url
      */

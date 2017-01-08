@@ -27,6 +27,7 @@
 $string['configplugin'] = 'ownCloud configuration';
 $string['pluginname'] = 'ownCloud authentication';
 $string['sciebo:view'] = 'View a ownCloud folder';
+$string['missing_settings'] = 'Please check the required client settings. Some might be missing.';
 
 // Settings.
 $string['clientid'] = 'Client ID';
