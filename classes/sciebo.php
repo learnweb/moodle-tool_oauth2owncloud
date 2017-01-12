@@ -141,13 +141,23 @@ class sciebo extends \oauth2_client {
         $this->log_out();
         $this->is_logged_in();
     }
-    public function make_folder($token, $path, $namepath) {
+
+    public function make_folder($token, $foldername, $id) {
         $this->dav->set_token($token);
+        $config = get_config('tool_oauth2sciebo');
+        $webdavpath = rtrim('/' . ltrim($config->path, '/ '), '/ ');
+        $path = $webdavpath . '/' . $id;
+        $namepath = $webdavpath . '/' . $id . '/' . $foldername;
         $this->dav->mkcol($path);
         $this->dav->mkcol($namepath);
     }
-    public function delete_folder() {
 
+    public function delete_folder($token, $foldername, $id) {
+        $this->dav->set_token($token);
+        $config = get_config('tool_oauth2sciebo');
+        $webdavpath = rtrim('/' . ltrim($config->path, '/ '), '/ ');
+        $namepath = $webdavpath . '/' . $id . '/' . $foldername;
+        $this->dav->delete($namepath);
     }
 
     public function post($url, $params = '', $options = array()) {
