@@ -23,12 +23,13 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// General:
+// General.
 $string['configplugin'] = 'ownCloud configuration';
 $string['pluginname'] = 'ownCloud authentication';
 $string['sciebo:view'] = 'View a ownCloud folder';
+$string['missing_settings'] = 'Please check the required client settings. Some might be missing.';
 
-// Settings:
+// Settings.
 $string['clientid'] = 'Client ID';
 $string['secret'] = 'Secret';
 $string['server'] = 'ownCloud Server';
@@ -38,7 +39,7 @@ $string['port'] = 'Port';
 $string['oauthlegend'] = 'OAuth 2.0:';
 $string['webdavlegend'] = 'WebDAV:';
 
-// Not used at the moment:
+// Not used at the moment.
 $string['user'] = 'Username';
 $string['pass'] = 'Password';
 $string['auth_url'] = 'Authorization URL';
