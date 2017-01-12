@@ -120,6 +120,14 @@ class sciebo extends \oauth2_client {
         $this->log_out();
         $this->is_logged_in();
     }
+    public function make_folder($token, $path, $namepath) {
+        $this->dav->set_token($token);
+        $this->dav->mkcol($path);
+        $this->dav->mkcol($namepath);
+    }
+    public function delete_folder() {
+
+    }
 
     public function post($url, $params = '', $options = array()) {
         // A basic auth header has to be added to the request for client authentication in ownCloud.
