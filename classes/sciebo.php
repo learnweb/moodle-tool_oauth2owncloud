@@ -112,8 +112,8 @@ class sciebo extends \oauth2_client {
 
     /**
      * The WebDav listing function is encapsulated into this helper function. Before the WebDAV function is called,
-     * an Access Token is set within the Client to enable data transmission.
-     * @param $path relative path to the file or directory.
+     * an Access Token is set within the Client to enable OAuth 2.0 authentication.
+     * @param $path string relative path to the file or directory.
      * @return array information about the file or directory.
      */
     public function get_listing($path) {
@@ -123,9 +123,9 @@ class sciebo extends \oauth2_client {
 
     /**
      * The WebDav function get_file is encapsulated into this helper function. Before the WebDAV function is called,
-     * an Access Token is set within the Client to enable data transmission.
-     * @param $source sourcepath of the file.
-     * @param $local local path in which the file shall be stored.
+     * an Access Token is set within the Client to enable OAuth 2.0 authentication.
+     * @param $source string sourcepath of the file.
+     * @param $local string local path in which the file shall be stored.
      * @return bool true on success, false otherwise.
      */
     public function get_file($source, $local) {
@@ -142,19 +142,34 @@ class sciebo extends \oauth2_client {
         $this->is_logged_in();
     }
 
+    /**
+     * Setter method for the Access Token.
+     * @param $token \stdClass which is to be stored inside the Client.
+     */
     public function set_access_token($token) {
         $this->store_token($token);
     }
 
-    public function make_folder($directory, $name) {
+    /**
+     * The WebDav function mkcol is encapsulated into this helper function. Before the WebDAV function is called,
+     * an Access Token is set within the Client to enable OAuth 2.0 authentication.
+     * @param $path string path in which the collection shall be created.
+     * @return int status code retrieved from server response.
+     */
+    public function make_folder($path) {
         $this->dav->set_token($this->get_accesstoken()->token);
-        $this->dav->mkcol($directory);
-        $this->dav->mkcol($name);
+        return $this->dav->mkcol($path);
     }
 
+    /**
+     * The WebDav function get_file is encapsulated into this helper function. Before the WebDAV function is called,
+     * an Access Token is set within the Client to enable OAuth 2.0 authentication.
+     * @param $path string path to the folder which shall be deleted.
+     * @return int status code retrieved from the server response.
+     */
     public function delete_folder($path) {
         $this->dav->set_token($this->get_accesstoken()->token);
-        $this->dav->delete($path);
+        return $this->dav->delete($path);
     }
 
     public function post($url, $params = '', $options = array()) {
