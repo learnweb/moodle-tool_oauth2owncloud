@@ -25,7 +25,7 @@
  */
 
 require('../../../config.php');
-require('../../../lib/adminlib.php');
+require($CFG->libdir . '/adminlib.php');
 require(__DIR__ . '/client_form.php');
 
 admin_externalpage_setup('tool_oauth2sciebo/auth');

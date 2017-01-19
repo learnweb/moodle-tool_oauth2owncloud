@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require('../../lib/formslib.php');
+require($CFG->libdir . '/formslib.php');
 
 class tool_oauth2sciebo_client_form extends moodleform {
 
