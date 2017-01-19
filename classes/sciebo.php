@@ -34,8 +34,6 @@ class sciebo extends \oauth2_client {
      * Create the ownCloud OAuth 2.0 and WebDAV clients. The required data for both clients is fetched from the
      * oauth2sciebo admin settings entered before by the user.
      *
-     * TODO: Handle missing or false settings, since they are not checked when filled out by the user.
-     *
      * @param   string      $key        The API key
      * @param   string      $secret     The API secret
      * @param   string      $callback   The callback URL
@@ -111,6 +109,23 @@ class sciebo extends \oauth2_client {
     }
 
     /**
+     * Setter method for the Access Token.
+     * @param $token \stdClass which is to be stored inside the Client.
+     */
+    public function set_access_token($token) {
+        $this->store_token($token);
+    }
+
+    /**
+     * Sets up a new Access Token after redirection from ownCloud. Therefore the old Token has to be discarded and a
+     * new one requested with the authorization code.
+     */
+    public function callback() {
+        $this->log_out();
+        $this->is_logged_in();
+    }
+
+    /**
      * The WebDav listing function is encapsulated into this helper function. Before the WebDAV function is called,
      * an Access Token is set within the Client to enable OAuth 2.0 authentication.
      * @param $path string relative path to the file or directory.
@@ -134,23 +149,6 @@ class sciebo extends \oauth2_client {
     }
 
     /**
-     * Sets up a new Access Token after redirection from ownCloud. Therefore the old Token has to be discarded and a
-     * new one requested with the authorization code.
-     */
-    public function callback() {
-        $this->log_out();
-        $this->is_logged_in();
-    }
-
-    /**
-     * Setter method for the Access Token.
-     * @param $token \stdClass which is to be stored inside the Client.
-     */
-    public function set_access_token($token) {
-        $this->store_token($token);
-    }
-
-    /**
      * The WebDav function mkcol is encapsulated into this helper function. Before the WebDAV function is called,
      * an Access Token is set within the Client to enable OAuth 2.0 authentication.
      * @param $path string path in which the collection shall be created.
@@ -170,6 +168,35 @@ class sciebo extends \oauth2_client {
     public function delete_folder($path) {
         $this->dav->set_token($this->get_accesstoken()->token);
         return $this->dav->delete($path);
+    }
+
+    /**
+     * This function fetches a link to a specific folder or file in ownCloud through the OCS Share API. Therefore the
+     * API had to be extended to support authentication via an Access Token.
+     * @param $path string path to the file or directory.
+     * @return string link URL retrieved from the request.
+     */
+    public function get_link($path) {
+        if (get_config('tool_oauth2sciebo', 'path') === 'http') {
+            $pref = 'http://';
+        } else {
+            $pref = 'https://';
+        }
+
+        // At the moment a token is send as a post parameter. This will have to be adjusted to the API in ownCloud.
+        $output = $this->post($pref.get_config('tool_oauth2sciebo', 'server').'/ocs/v1.php/apps/files_sharing/api/v1/shares',
+                http_build_query(array('path' => $path,
+                                       'shareType' => 3,
+                                       'publicUpload' => false,
+                                       'permissions' => 31,
+                                       'token' => $this->get_stored_token()
+                ), null, "&"));
+
+        $xml = simplexml_load_string($output);
+        $fields = explode("/s/", $xml->data[0]->url[0]);
+        $fileid = $fields[1];
+
+        return $pref.get_config('tool_oauth2sciebo', 'server').'/public.php?service=files&t='.$fileid;
     }
 
     public function post($url, $params = '', $options = array()) {
