@@ -173,30 +173,36 @@ class sciebo extends \oauth2_client {
     /**
      * This function fetches a link to a specific folder or file in ownCloud through the OCS Share API. Therefore the
      * API had to be extended to support authentication via an Access Token.
-     * @param $path string path to the file or directory.
-     * @return string link URL retrieved from the request.
+     * @param $path string path to the file or folder in ownCloud.
+     * @param null $user string specific user to be shared with (optional).
+     * @return bool
      */
-    public function get_link($path) {
+    public function get_link($path, $user = null) {
         if (get_config('tool_oauth2sciebo', 'path') === 'http') {
             $pref = 'http://';
         } else {
             $pref = 'https://';
         }
 
-        // At the moment a token is send as a post parameter. This will have to be adjusted to the API in ownCloud.
-        $output = $this->post($pref.get_config('tool_oauth2sciebo', 'server').'/ocs/v1.php/apps/files_sharing/api/v1/shares',
-                http_build_query(array('path' => $path,
-                                       'shareType' => 3,
-                                       'publicUpload' => false,
-                                       'permissions' => 31,
-                                       'token' => $this->get_stored_token()
-                ), null, "&"));
+        if($user == null) {
+            $query = http_build_query(array('path' => $path,
+                                            'shareType' => 3,
+                                            'publicUpload' => false,
+                                            'permissions' => 31,
+                                            'token' => $this->get_stored_token()
+                                            ), null, "&");
+        } else {
+            $query = http_build_query(array('path' => $path,
+                                            'shareType' => 0,
+                                            'shareWith' => $user,
+                                            'publicUpload' => true,
+                                            'permissions' => 4,
+                                            'token' => $this->get_stored_token()
+                                            ), null, "&");
+        }
 
-        $xml = simplexml_load_string($output);
-        $fields = explode("/s/", $xml->data[0]->url[0]);
-        $fileid = $fields[1];
-
-        return $pref.get_config('tool_oauth2sciebo', 'server').'/public.php?service=files&t='.$fileid;
+        return $this->post($pref . get_config('tool_oauth2sciebo', 'server') . '/ocs/v1.php/apps/files_sharing/api/v1/shares',
+                $query);
     }
 
     public function post($url, $params = '', $options = array()) {
