@@ -23,6 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace tool_oauth2sciebo;
+use \stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -123,6 +124,75 @@ class sciebo extends \oauth2_client {
     public function callback() {
         $this->log_out();
         $this->is_logged_in();
+    }
+
+    /**
+     * Redirects to the parent method after checking the Refresh Token.
+     * @return bool true, if Access Token is set.
+     */
+    public function is_logged_in() {
+        // Has the token expired?
+        if (isset($this->get_accesstoken()->expires) && time() >= $this->get_accesstoken()->expires) {
+            $this->log_out();
+            // If the Access Token has expired and we possess a Refresh Token, a new Access Token is requested.
+            if ((isset($this->get_accesstoken()->refresh_token)) &&
+                    $this->upgrade_token($this->get_accesstoken()->refresh_token, true)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return parent::is_logged_in();
+    }
+
+    /**
+     * Overwrites the parent method, since a possibility to request an Access Token from a Refresh Token is needed.
+     * Furthermore the Access Token Object, besides access_token and expires_in, has the properties user_id and
+     * refresh_token, which are used by the implemented clients.
+     * @param string $code Authorization Code or Refresh Token.
+     * @param bool $refresh indicates whether a Refresh Token has been passed.
+     * @return bool true is Access Token is fetched from the server, false if not.
+     */
+    public function upgrade_token($code, $refresh = false) {
+        $callbackurl = self::callback_url();
+
+        if ($refresh == false) {
+            $grant = 'authorization_code';
+        } else {
+            $grant = 'refresh_token';
+        }
+
+        $params = array(
+                'client_id' => $this->get_clientid(),
+                'client_secret' => $this->get_clientsecret(),
+                'grant_type' => $grant,
+                'code' => $code,
+                'redirect_uri' => $callbackurl->out(false),
+        );
+
+
+        $response = $this->post($this->token_url(), $params);
+
+        if (!$this->info['http_code'] === 200) {
+            throw new moodle_exception('Could not upgrade oauth token');
+        }
+
+        $r = json_decode($response);
+
+        if (!isset($r->access_token)) {
+            return false;
+        }
+
+        // Store the token, expiry time, the user id and refresh_token.
+        $accesstoken = new stdClass;
+        $accesstoken->token = $r->access_token;
+        $accesstoken->expires = (time() + ($r->expires_in - 10));
+        $accesstoken->user_id = $r->user_id;
+        $accesstoken->refresh_token = $r->refresh_token;
+
+        $this->store_token($accesstoken);
+
+        return true;
     }
 
     /**
