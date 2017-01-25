@@ -306,7 +306,7 @@ class sciebo_client {
      * Public method put
      *
      * Puts a file into a collection.
-     *	Data is putted as one chunk!
+     * Data is putted as one chunk!
      * @param string path, string data
      * @return int status-code read from webdavserver. False on error.
      */
@@ -1003,7 +1003,7 @@ EOD;
                 $pathparts = explode("/", $localpath);
             }
             $checkpath = "";
-            for ($i = 1; $i < sizeof($pathparts) - 1; $i++) {
+            for ($i = 1; $i < count($pathparts) - 1; $i++) {
                 $checkpath .= "/" . $pathparts[$i];
                 if (!is_dir($checkpath)) {
 
@@ -1315,8 +1315,7 @@ EOD;
             if ($signature = $this->digest_signature($method)) {
                 $this->header_add($signature);
             }
-
-        // Our local WebDav client is adjusted to enable it to send Bearer Authorization headers.
+            // Our local WebDav client is adjusted to enable it to send Bearer Authorization headers.
         } else if ($this->_auth == 'bearer') {
             $this->header_add(sprintf('Authorization: Bearer %s', $this->_token));
         }
@@ -1731,8 +1730,8 @@ EOD;
      * @access private
      */
     private function _error_log($errstring) {
-        if ($this->_debug) {
-            error_log($errstring);
-        }
+        // if ($this->_debug) {
+        // error_log($errstring);
+        // }
     }
 }

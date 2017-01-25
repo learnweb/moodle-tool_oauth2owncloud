@@ -170,7 +170,6 @@ class sciebo extends \oauth2_client {
                 'redirect_uri' => $callbackurl->out(false),
         );
 
-
         $response = $this->post($this->token_url(), $params);
 
         if (!$this->info['http_code'] === 200) {
@@ -254,7 +253,7 @@ class sciebo extends \oauth2_client {
             $pref = 'https://';
         }
 
-        if($user == null) {
+        if ($user == null) {
             $query = http_build_query(array('path' => $path,
                                             'shareType' => 3,
                                             'publicUpload' => false,
