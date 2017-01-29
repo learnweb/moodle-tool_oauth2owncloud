@@ -257,28 +257,33 @@ class sciebo extends \oauth2_client {
             $query = http_build_query(array('path' => $path,
                                             'shareType' => 3,
                                             'publicUpload' => false,
-                                            'permissions' => 31,
-                                            'token' => $this->get_stored_token()
+                                            'permissions' => 31
                                             ), null, "&");
         } else {
             $query = http_build_query(array('path' => $path,
                                             'shareType' => 0,
                                             'shareWith' => $user,
                                             'publicUpload' => true,
-                                            'permissions' => 4,
-                                            'token' => $this->get_stored_token()
+                                            'permissions' => 4
                                             ), null, "&");
         }
 
         return $this->post($pref . get_config('tool_oauth2sciebo', 'server') . '/ocs/v1.php/apps/files_sharing/api/v1/shares',
-                $query);
+                $query, array(), true);
     }
 
-    public function post($url, $params = '', $options = array()) {
-        // A basic auth header has to be added to the request for client authentication in ownCloud.
-        $this->setHeader(array(
-            'Authorization: Basic ' . base64_encode($this->get_clientid() . ':' . $this->get_clientsecret())
-        ));
+    public function post($url, $params = '', $options = array(), $bearer = false) {
+
+        if ($bearer == true) {
+            $this->setHeader(array(
+                    'Authorization: Bearer ' . $this->get_accesstoken()->token)
+            );
+        } else {
+            // A basic auth header has to be added to the request for client authentication in ownCloud.
+            $this->setHeader(array(
+                    'Authorization: Basic ' . base64_encode($this->get_clientid() . ':' . $this->get_clientsecret())
+            ));
+        }
 
         return parent::post($url, $params, $options);
     }
