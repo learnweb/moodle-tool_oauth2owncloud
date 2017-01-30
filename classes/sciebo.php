@@ -247,11 +247,6 @@ class sciebo extends \oauth2_client {
      * @return bool
      */
     public function get_link($path, $user = null) {
-        if (get_config('tool_oauth2sciebo', 'path') === 'http') {
-            $pref = 'http://';
-        } else {
-            $pref = 'https://';
-        }
 
         $pref = get_config('tool_oauth2sciebo', 'type') . '://';
 
@@ -272,17 +267,13 @@ class sciebo extends \oauth2_client {
 
         $path = str_replace('remote.php/webdav/', '', get_config('tool_oauth2sciebo', 'path'));
 
-        return $this->post($pref . get_config('tool_oauth2sciebo', 'server') . '/' . $path . 'ocs/v1.php/apps/files_sharing/api/v1/shares',
-                $query, array(), true);
+        return $this->post($pref . get_config('tool_oauth2sciebo', 'server') . '/' . $path .
+                'ocs/v1.php/apps/files_sharing/api/v1/shares', $query, array(), true);
     }
 
     public function post($url, $params = '', $options = array(), $bearer = false) {
 
-        if ($bearer == true) {
-            //$this->setHeader(array(
-              //      'Authorization: Bearer ' . $this->get_accesstoken()->token)
-            //);
-        } else {
+        if ($bearer == false) {
             // A basic auth header has to be added to the request for client authentication in ownCloud.
             $this->setHeader(array(
                     'Authorization: Basic ' . base64_encode($this->get_clientid() . ':' . $this->get_clientsecret())
