@@ -159,15 +159,15 @@ class sciebo extends \oauth2_client {
 
         if ($refresh == false) {
             $grant = 'authorization_code';
+            $type = 'code';
         } else {
             $grant = 'refresh_token';
+            $type = 'refresh_token';
         }
 
         $params = array(
-                'client_id' => $this->get_clientid(),
-                'client_secret' => $this->get_clientsecret(),
                 'grant_type' => $grant,
-                'code' => $code,
+                $type => $code,
                 'redirect_uri' => $callbackurl->out(false),
         );
 
@@ -261,7 +261,6 @@ class sciebo extends \oauth2_client {
             $query = http_build_query(array('path' => $path,
                                             'shareType' => 0,
                                             'shareWith' => $user,
-                                            'permissions' => 31
                                             ), null, "&");
         }
 
