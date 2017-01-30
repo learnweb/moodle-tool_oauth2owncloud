@@ -133,12 +133,13 @@ class sciebo extends \oauth2_client {
     public function is_logged_in() {
         // Has the token expired?
         if (isset($this->get_accesstoken()->expires) && time() >= $this->get_accesstoken()->expires) {
-            $this->log_out();
+
             // If the Access Token has expired and we possess a Refresh Token, a new Access Token is requested.
             if ((isset($this->get_accesstoken()->refresh_token)) &&
                     $this->upgrade_token($this->get_accesstoken()->refresh_token, true)) {
                 return true;
             } else {
+                $this->log_out();
                 return false;
             }
         }
@@ -260,8 +261,7 @@ class sciebo extends \oauth2_client {
             $query = http_build_query(array('path' => $path,
                                             'shareType' => 0,
                                             'shareWith' => $user,
-                                            'publicUpload' => true,
-                                            'permissions' => 4
+                                            'permissions' => 31
                                             ), null, "&");
         }
 
@@ -278,6 +278,8 @@ class sciebo extends \oauth2_client {
             $this->setHeader(array(
                     'Authorization: Basic ' . base64_encode($this->get_clientid() . ':' . $this->get_clientsecret())
             ));
+
+            $this->log_out();
         }
 
         return parent::post($url, $params, $options);
