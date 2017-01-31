@@ -22,6 +22,7 @@
  * @author     Projektseminar Uni Münster
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 namespace tool_oauth2sciebo;
 use \stdClass;
 
@@ -90,6 +91,7 @@ class sciebo extends \oauth2_client {
 
     /**
      * Returns the auth url for OAuth 2.0 request
+     *
      * @return string the auth url
      */
     protected function auth_url() {
@@ -101,6 +103,7 @@ class sciebo extends \oauth2_client {
 
     /**
      * Returns the token url for OAuth 2.0 request
+     *
      * @return string the token url
      */
     protected function token_url() {
@@ -111,6 +114,7 @@ class sciebo extends \oauth2_client {
 
     /**
      * Setter method for the Access Token.
+     *
      * @param $token \stdClass which is to be stored inside the Client.
      */
     public function set_access_token($token) {
@@ -128,6 +132,7 @@ class sciebo extends \oauth2_client {
 
     /**
      * Redirects to the parent method after checking the Refresh Token.
+     *
      * @return bool true, if Access Token is set.
      */
     public function is_logged_in() {
@@ -143,6 +148,8 @@ class sciebo extends \oauth2_client {
                 return false;
             }
         }
+        // If the token has not expired yet, the parent method checks if an Access Token or Authorization
+        // Code is available.
         return parent::is_logged_in();
     }
 
@@ -150,6 +157,7 @@ class sciebo extends \oauth2_client {
      * Overwrites the parent method, since a possibility to request an Access Token from a Refresh Token is needed.
      * Furthermore the Access Token Object, besides access_token and expires_in, has the properties user_id and
      * refresh_token, which are used by the implemented clients.
+     *
      * @param string $code Authorization Code or Refresh Token.
      * @param bool $refresh indicates whether a Refresh Token has been passed.
      * @return bool true is Access Token is fetched from the server, false if not.
@@ -183,7 +191,7 @@ class sciebo extends \oauth2_client {
             return false;
         }
 
-        // Store the token, expiry time, the user id and refresh_token.
+        // Store the token, expiry time, the user id and refresh token.
         $accesstoken = new stdClass;
         $accesstoken->token = $r->access_token;
         $accesstoken->expires = (time() + ($r->expires_in - 10));
@@ -198,6 +206,7 @@ class sciebo extends \oauth2_client {
     /**
      * The WebDav listing function is encapsulated into this helper function. Before the WebDAV function is called,
      * an Access Token is set within the Client to enable OAuth 2.0 authentication.
+     *
      * @param $path string relative path to the file or directory.
      * @return array information about the file or directory.
      */
@@ -209,6 +218,7 @@ class sciebo extends \oauth2_client {
     /**
      * The WebDav function get_file is encapsulated into this helper function. Before the WebDAV function is called,
      * an Access Token is set within the Client to enable OAuth 2.0 authentication.
+     *
      * @param $source string sourcepath of the file.
      * @param $local string local path in which the file shall be stored.
      * @return bool true on success, false otherwise.
@@ -221,6 +231,7 @@ class sciebo extends \oauth2_client {
     /**
      * The WebDav function mkcol is encapsulated into this helper function. Before the WebDAV function is called,
      * an Access Token is set within the Client to enable OAuth 2.0 authentication.
+     *
      * @param $path string path in which the collection shall be created.
      * @return int status code retrieved from server response.
      */
@@ -232,6 +243,7 @@ class sciebo extends \oauth2_client {
     /**
      * The WebDav function get_file is encapsulated into this helper function. Before the WebDAV function is called,
      * an Access Token is set within the Client to enable OAuth 2.0 authentication.
+     *
      * @param $path string path to the folder which shall be deleted.
      * @return int status code retrieved from the server response.
      */
@@ -243,14 +255,16 @@ class sciebo extends \oauth2_client {
     /**
      * This function fetches a link to a specific folder or file in ownCloud through the OCS Share API. Therefore the
      * API had to be extended to support authentication via an Access Token.
+     *
      * @param $path string path to the file or folder in ownCloud.
      * @param null $user string specific user to be shared with (optional).
-     * @return bool
+     * @return mixed response from ownCloud server or error message.
      */
     public function get_link($path, $user = null) {
 
         $pref = get_config('tool_oauth2sciebo', 'type') . '://';
 
+        // Depending on whether a public share or a specific user share is requested, the POST parameters are set.
         if ($user == null) {
             $query = http_build_query(array('path' => $path,
                                             'shareType' => 3,
@@ -270,15 +284,31 @@ class sciebo extends \oauth2_client {
                 'ocs/v1.php/apps/files_sharing/api/v1/shares', $query, array(), true);
     }
 
-    public function post($url, $params = '', $options = array(), $bearer = false) {
+    /**
+     * Due to the fact, that the user credentials for client authentication in ownCloud need to be provided
+     * by an Basic Authorization Header instead of POST parameters, the cURL function post is extended by
+     * an option to set such header.
+     * This header is needed for Access Token requests with an Authorization Code or Refresh Token.
+     *
+     * @param string $url URL which the request has to be sent to.
+     * @param string|array $params POST parameters.
+     * @param array $options cURL options for the request.
+     * @param bool $auth indicates whether a Basic Authentication Header has to be added to the request.
+     * @return mixed response from ownCloud server or error message.
+     */
+    public function post($url, $params = '', $options = array(), $auth = false) {
 
-        if ($bearer == false) {
+        if ($auth == false) {
+
             // A basic auth header has to be added to the request for client authentication in ownCloud.
             $this->setHeader(array(
                     'Authorization: Basic ' . base64_encode($this->get_clientid() . ':' . $this->get_clientsecret())
             ));
 
+            // If an Access Token is stored within the Client, it has to be deleted to prevent the addidion
+            // of an Bearer Authorization Header in the request method.
             $this->log_out();
+
         }
 
         return parent::post($url, $params, $options);
