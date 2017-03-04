@@ -253,6 +253,20 @@ class sciebo extends \oauth2_client {
     }
 
     /**
+     * The WebDav function move is encapsulated into this helper function. Before the WebDAV function is called,
+     * an Access Token is set within the Client to enable OAuth 2.0 authentication.
+     *
+     * @param $src string path to the folder/file which shall be moved.
+     * @param $dst string path to the folder/file which shall be moved.
+     * @param $overwrite bool true, if an existing folder/file should be overwritten.
+     * @return int status code retrieved from the server response.
+     */
+    public function move($src, $dst, $overwrite) {
+        $this->dav->set_token($this->get_accesstoken()->token);
+        return $this->dav->move($src, $dst, $overwrite);
+    }
+
+    /**
      * This function fetches a link to a specific folder or file in ownCloud through the OCS Share API. Therefore the
      * API had to be extended to support authentication via an Access Token.
      *
