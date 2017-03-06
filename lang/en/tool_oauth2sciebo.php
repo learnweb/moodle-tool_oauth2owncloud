@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -16,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * tool_oauth2sciebo.php for oauth2sciebo admin tool
+ * tool_oauth2sciebo.php for oauth2sciebo admin tool. Contains all defined language strings.
  *
  * @package    tool_oauth2sciebo
  * @copyright  2016 Westfälische Wilhelms-Universität Münster (WWU Münster)
@@ -24,18 +23,33 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['configplugin'] = 'Sciebo configuration';
-$string['pluginname'] = 'Sciebo authentication';
-$string['cachedef_foldername'] = 'Folder name cache';
+// General.
+$string['configplugin'] = 'ownCloud configuration';
+$string['pluginname'] = 'ownCloud authentication';
+$string['sciebo:view'] = 'View a ownCloud folder';
+$string['missing_settings'] = 'Please check the required client settings. Some might be missing.';
+
+// Settings.
 $string['clientid'] = 'Client ID';
+$string['secret'] = 'Secret';
+$string['server'] = 'ownCloud Server';
+$string['path'] = 'ownCloud Path';
+$string['type'] = 'Type';
+$string['port'] = 'Port';
+$string['oauthlegend'] = 'OAuth 2.0:';
+$string['webdavlegend'] = 'WebDAV:';
+
+$string['user'] = 'Username';
+$string['pass'] = 'Password';
+$string['auth_url'] = 'Authorization URL';
+$string['token_url'] = 'Token URL';
+$string['oauth2redirecturi'] = 'OAuth 2 Redirect URI';
 $string['clientid_desc'] = 'Beschreibung für ClientID';
-$string['secret'] = 'Sciebo Secret';
-$string['sciebo:view'] = 'View a Sciebo folder';
+
+$string['oauthinfo'] = 'some important installing sentence';
 $string['required'] = 'Required';
-$string['pluginname_help'] = 'A Sciebo authentication admin tool';
-$string['oauthsciebo'] = 'To use this plugin, you must register your site with Sciebo.
+$string['pluginname_help'] = 'A ownCloud authentication admin tool';
+$string['oauthsciebo'] = 'To use this plugin, you must register your site with ownCloud.
 As part of the registration process, you will need to enter the following URL as \'Redirect domain\': {$a}
 Once registered, you will be provided with a client ID and secret which can be entered here.';
-$string['pluginname'] = 'Sciebo authentication';
-$string['apikey'] = 'Sciebo authentication API key';
-$string['oauth2redirecturi'] = 'OAuth 2 Redirect URI';
+$string['remember'] = 'Remember me';

@@ -15,37 +15,17 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
-* Version.php for oauth2sciebo admin tool
-*
-* @package    tool_oauth2sciebo
-* @copyright  2016 Westfälische Wilhelms-Universität Münster (WWU Münster)
-* @author     Projektseminar Uni Münster
-* @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
-*/
-defined('MOODLE_INTERNAL') || die('moodle_internal not defined');
-
-if ($hassiteconfig) {
-
-    $temp = new admin_settingpage('oauth2sciebo',
-        new lang_string('pluginname', 'tool_oauth2sciebo'));
-
-    $temp->add(new admin_setting_heading('oauth2sciebo_head',
-        get_string('configplugin', 'tool_oauth2sciebo'),
-        ''));
-
-/**    $image = '<a href="http://www.sciebo.de" target="_new"><img src="' .
-        $OUTPUT->pix_url('icon', 'tool_oauth2sciebo') . '" /></a>&nbsp;&nbsp;&nbsp;';
+ * Settings.php for oauth2sciebo admin tool. Registrates the redirection to the external setting page.
+ *
+ * @package    tool_oauth2sciebo
+ * @copyright  2016 Westfälische Wilhelms-Universität Münster (WWU Münster)
+ * @author     Projektseminar Uni Münster
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-    $temp->add(new admin_setting_configtext('tool_oauth2sciebo/clientid',
-        get_string('clientid', 'tool_oauth2sciebo'),
-        ''));
+defined('MOODLE_INTERNAL') || die('moodle_internal not defined');
 
-    $temp->add(new admin_setting_configtext('tool_oauth2sciebo/secret',
-        get_string('secret', 'tool_oauth2sciebo'),
-        get_string('oauthsciebo', 'tool_oauth2sciebo'),
-        ''));
-
-    $ADMIN->add('tools', $temp);
-
-}
+// Settings for the OAuth 2.0 and WebDAV clients are managed on an external page.
+$ADMIN->add('authsettings', new admin_externalpage('tool_oauth2sciebo/auth',
+        'Sciebo OAuth 2.0 Configuration',
+        "$CFG->wwwroot/$CFG->admin/tool/oauth2sciebo/index.php"));
