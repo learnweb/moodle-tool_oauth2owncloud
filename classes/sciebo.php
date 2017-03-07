@@ -264,8 +264,6 @@ class sciebo extends \oauth2_client {
     public function move($src, $dst, $overwrite) {
         $this->dav->set_token($this->get_accesstoken()->token);
 
-        $pref = get_config('tool_oauth2sciebo', 'type') . '://';
-
         $source = '/' . get_config('tool_oauth2sciebo', 'path') . $src;
 
         $destination = '/' . get_config('tool_oauth2sciebo', 'path') . $dst;
