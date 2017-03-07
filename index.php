@@ -32,16 +32,39 @@ admin_externalpage_setup('tool_oauth2sciebo/auth');
 
 echo $OUTPUT->header();
 
-$mform = new tool_oauth2sciebo_client_form(null, array(
-        // The default value for each field within the form is fetched from the Admin Tree.
-        // When no values were set before, the default is empty.
-        'clientid' => get_config('tool_oauth2sciebo', 'clientid'),
-        'secret' => get_config('tool_oauth2sciebo', 'secret'),
-        'server' => get_config('tool_oauth2sciebo', 'server'),
-        'path' => get_config('tool_oauth2sciebo', 'path'),
-        'type' => get_config('tool_oauth2sciebo', 'type'),
-        'port' => get_config('tool_oauth2sciebo', 'port')
-));
+// The default form values are initialized.
+$elements = array("clientid", "secret", "server", "path");
+$arr = array();
+
+foreach ($elements as $e) {
+
+    $def = get_config('tool_oauth2sciebo', $e);
+
+    if ($def == null) {
+        $arr[$e] = '';
+    } else {
+        $arr[$e] = $def;
+    }
+}
+
+if (get_config('tool_oauth2sciebo', 'protocol') == null) {
+    $arr['protocol'] = 'https';
+} else {
+    $arr['protocol'] = get_config('tool_oauth2sciebo', 'protocol');
+}
+
+if (get_config('tool_oauth2sciebo', 'port') == null || empty(get_config('tool_oauth2sciebo', 'port'))) {
+    if ($arr['protocol'] == 'http') {
+        $arr['port'] = 80;
+    } else {
+        $arr['port'] = 443;
+    }
+} else {
+    $arr['port'] = get_config('tool_oauth2sciebo', 'port');
+}
+
+$mform = new tool_oauth2sciebo_client_form(null, $arr);
+
 
 // If the cancel button has been pressed, the setting page is left.
 if ($mform->is_cancelled()) {
@@ -54,7 +77,7 @@ if ($mform->is_cancelled()) {
         set_config('server', $fromform->server, 'tool_oauth2sciebo');
         set_config('path', $fromform->path, 'tool_oauth2sciebo');
         set_config('port', $fromform->port, 'tool_oauth2sciebo');
-        set_config('type', $fromform->type, 'tool_oauth2sciebo');
+        set_config('protocol', $fromform->protocol, 'tool_oauth2sciebo');
     } else if (isset($fromform->reset)) {
         // If the reset button has been pressed, all settings are reset in the Admin Tree.
         set_config('clientid', '', 'tool_oauth2sciebo');
@@ -62,7 +85,7 @@ if ($mform->is_cancelled()) {
         set_config('server', '', 'tool_oauth2sciebo');
         set_config('path', '', 'tool_oauth2sciebo');
         set_config('port', '', 'tool_oauth2sciebo');
-        set_config('type', '', 'tool_oauth2sciebo');
+        set_config('protocol', '', 'tool_oauth2sciebo');
         redirect(new moodle_url('/my/'));
     }
 }
