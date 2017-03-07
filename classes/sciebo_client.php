@@ -530,13 +530,13 @@ class sciebo_client {
     // --------------------------------------------------------------------------
     // public method move
     // move/rename a file/collection on webdav server
-    public function move($srcpath, $dstpath, $overwrite) {
+    public function move($src_path, $dst_path, $overwrite) {
 
-        $this->_path = $srcpath;
+        //$this->_path = $this->translate_uri($src_path);
+        $this->_path = $src_path;
         $this->header_unset();
-
         $this->create_basic_request('MOVE');
-        $this->header_add(sprintf('Destination: http://%s%s', $this->_server, $this->translate_uri($dstpath)));
+        $this->header_add(sprintf('Destination: http://%s%s', $this->_server, $this->translate_uri($dst_path)));
         if ($overwrite) {
             $this->header_add('Overwrite: T');
         } else {
