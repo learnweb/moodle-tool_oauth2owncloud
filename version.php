@@ -15,18 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version.php for oauth2sciebo admin tool
+ * version.php for oauth2owncloud admin tool
  *
- * @package    tool_oauth2sciebo
- * @copyright  2016 Westfälische Wilhelms-Universität Münster (WWU Münster)
+ * @package    tool_oauth2owncloud
+ * @copyright  2017 Westfälische Wilhelms-Universität Münster (WWU Münster)
  * @author     Projektseminar Uni Münster
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'tool_oauth2sciebo'; // Full name of the plugin (used for diagnostics).
-$plugin->version   = 2017011200;        // The current plugin version (Date: YYYYMMDDXX).
+$plugin->component = 'tool_oauth2owncloud'; // Full name of the plugin (used for diagnostics).
+$plugin->version   = 2017030900;        // The current plugin version (Date: YYYYMMDDXX).
 $plugin->release = 'v0.0';
 $plugin->requires  = 2016051900;        // Requires this Moodle version.
 $plugin->maturity = MATURITY_ALPHA;
