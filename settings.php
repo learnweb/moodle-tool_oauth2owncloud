@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Settings.php for oauth2sciebo admin tool. Registrates the redirection to the external setting page.
+ * Settings.php for oauth2owncloud admin tool. Registrates the redirection to the external setting page.
  *
- * @package    tool_oauth2sciebo
- * @copyright  2016 Westfälische Wilhelms-Universität Münster (WWU Münster)
+ * @package    tool_oauth2owncloud
+ * @copyright  2017 Westfälische Wilhelms-Universität Münster (WWU Münster)
  * @author     Projektseminar Uni Münster
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -26,6 +26,6 @@
 defined('MOODLE_INTERNAL') || die('moodle_internal not defined');
 
 // Settings for the OAuth 2.0 and WebDAV clients are managed on an external page.
-$ADMIN->add('authsettings', new admin_externalpage('tool_oauth2sciebo/auth',
-        'Sciebo OAuth 2.0 Configuration',
-        "$CFG->wwwroot/$CFG->admin/tool/oauth2sciebo/index.php"));
+$ADMIN->add('tools', new admin_externalpage('tool_oauth2owncloud/auth',
+        'owncloud OAuth 2.0 Configuration',
+        "$CFG->wwwroot/$CFG->admin/tool/oauth2owncloud/index.php"));

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace tool_oauth2sciebo;
+namespace tool_oauth2owncloud;
 use core_php_time_limit;
 
 /**
@@ -35,7 +35,7 @@ use core_php_time_limit;
  * @version 0.1.5
  */
 
-class sciebo_client {
+class owncloud_client {
 
     /**#@+
      * @access private
@@ -530,13 +530,13 @@ class sciebo_client {
     // --------------------------------------------------------------------------
     // public method move
     // move/rename a file/collection on webdav server
-    public function move($srcpath, $dstpath, $overwrite) {
+    public function move($src_path, $dst_path, $overwrite) {
 
-        $this->_path = $this->translate_uri($srcpath);
+        //$this->_path = $this->translate_uri($src_path);
+        $this->_path = $src_path;
         $this->header_unset();
-
         $this->create_basic_request('MOVE');
-        $this->header_add(sprintf('Destination: http://%s%s', $this->_server, $this->translate_uri($dstpath)));
+        $this->header_add(sprintf('Destination: http://%s%s', $this->_server, $this->translate_uri($dst_path)));
         if ($overwrite) {
             $this->header_add('Overwrite: T');
         } else {
