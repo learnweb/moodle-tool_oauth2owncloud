@@ -1,7 +1,6 @@
 #moodle-tool-oauth2owncloud *(beta_candidate)*
 
 # English
-#moodle-tool-oauth2owncloud *(alpha_candidate)*
 [![Build Status](https://travis-ci.org/pssl16/moodle-tool_oauth2owncloud.svg?branch=master)]
 (https://travis-ci.org/pssl16/moodle-tool_oauth2sciebo)</br>
 This Plugin connects owncloud with Moodle with OAuth2. It will later serve the following Plugins:
