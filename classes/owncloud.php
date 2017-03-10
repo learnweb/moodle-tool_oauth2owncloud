@@ -15,54 +15,57 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Sciebo Class for oauth2sciebo admin tool
+ * ownCloud Class for oauth2owncloud admin tool.
  *
- * @package    tool_oauth2sciebo
- * @copyright  2016 Westfälische Wilhelms-Universität Münster (WWU Münster)
+ * @package    tool_oauth2owncloud
+ * @copyright  2017 Westfälische Wilhelms-Universität Münster (WWU Münster)
  * @author     Projektseminar Uni Münster
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_oauth2sciebo;
+namespace tool_oauth2owncloud;
 use \stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/oauthlib.php');
 
-class sciebo extends \oauth2_client {
+class owncloud extends \oauth2_client {
+
+    /** @var null|owncloud_client webdav client which is used for webdav operations. */
+    private $dav = null;
 
     /**
      * Create the ownCloud OAuth 2.0 and WebDAV clients. The required data for both clients is fetched from the
-     * oauth2sciebo admin settings entered before by the user.
+     * oauth2owncloud admin settings entered before by the user.
      *
      * @param   string      $key        The API key
      * @param   string      $secret     The API secret
-     * @param   string      $callback   The callback URL
+     * @param   \moodle_url      $callback   The callback URL
      */
     public function __construct($callback) {
-        parent::__construct(get_config('tool_oauth2sciebo', 'clientid'),
-            get_config('tool_oauth2sciebo', 'secret'), $callback, '');
+        parent::__construct(get_config('tool_oauth2owncloud', 'clientid'),
+            get_config('tool_oauth2owncloud', 'secret'), $callback, '');
 
-        if (empty(get_config('tool_oauth2sciebo', 'server'))) {
+        if (empty(get_config('tool_oauth2owncloud', 'server'))) {
             return;
         }
-        if ('http' == (get_config('tool_oauth2sciebo', 'type'))) {
+        if ('http' == (get_config('tool_oauth2owncloud', 'protocol'))) {
             $this->webdav_type = '';
         } else {
             $this->webdav_type = 'ssl://';
         }
-        if (empty(get_config('tool_oauth2sciebo', 'port'))) {
+        if (empty(get_config('tool_oauth2owncloud', 'port'))) {
             if (empty($this->webdav_type)) {
                 $this->webdav_port = 80;
             } else {
                 $this->webdav_port = 443;
             }
         } else {
-            $this->webdav_port = get_config('tool_oauth2sciebo', 'port');
+            $this->webdav_port = get_config('tool_oauth2owncloud', 'port');
         }
 
-        $this->dav = new sciebo_client(get_config('tool_oauth2sciebo', 'server'),
+        $this->dav = new owncloud_client(get_config('tool_oauth2owncloud', 'server'),
             '', '', 'bearer', $this->webdav_type);
         $this->dav->port = $this->webdav_port;
         $this->dav->debug = false;
@@ -74,18 +77,18 @@ class sciebo extends \oauth2_client {
      * external setting page of the plugin.
      */
     public function check_data() {
-        if (empty(get_config('tool_oauth2sciebo', 'clientid')) ||
-                empty(get_config('tool_oauth2sciebo', 'secret')) ||
-                empty(get_config('tool_oauth2sciebo', 'server')) ||
-                empty(get_config('tool_oauth2sciebo', 'path')) ||
-                empty(get_config('tool_oauth2sciebo', 'type'))) {
+        if (empty(get_config('tool_oauth2owncloud', 'clientid')) ||
+                empty(get_config('tool_oauth2owncloud', 'secret')) ||
+                empty(get_config('tool_oauth2owncloud', 'server')) ||
+                empty(get_config('tool_oauth2owncloud', 'path')) ||
+                empty(get_config('tool_oauth2owncloud', 'protocol'))) {
 
             global $CFG, $OUTPUT;
-            $link = $CFG->wwwroot.'/'.$CFG->admin.'/tool/oauth2sciebo/index.php';
+            $link = $CFG->wwwroot.'/'.$CFG->admin.'/tool/oauth2owncloud/index.php';
 
             // Generates a link to the external admin setting page.
             echo $OUTPUT->notification('<a href="'.$link.'" target="_blank">
-            '.get_string('missing_settings', 'tool_oauth2sciebo').'</a>', 'warning');
+            '.get_string('missing_settings', 'tool_oauth2owncloud').'</a>', 'warning');
         }
     }
 
@@ -96,8 +99,8 @@ class sciebo extends \oauth2_client {
      */
     protected function auth_url() {
         // Dynamically generated from the admin tool settings.
-        $path = str_replace('remote.php/webdav/', '', get_config('tool_oauth2sciebo', 'path'));
-        return get_config('tool_oauth2sciebo', 'type') . '://' . get_config('tool_oauth2sciebo', 'server') . '/' . $path
+        $path = str_replace('remote.php/webdav/', '', get_config('tool_oauth2owncloud', 'path'));
+        return get_config('tool_oauth2owncloud', 'protocol') . '://' . get_config('tool_oauth2owncloud', 'server') . '/' . $path
                . 'index.php/apps/oauth2/authorize';
     }
 
@@ -107,8 +110,8 @@ class sciebo extends \oauth2_client {
      * @return string the token url
      */
     protected function token_url() {
-        $path = str_replace('remote.php/webdav/', '', get_config('tool_oauth2sciebo', 'path'));
-        return get_config('tool_oauth2sciebo', 'type') . '://' . get_config('tool_oauth2sciebo', 'server')  . '/' . $path
+        $path = str_replace('remote.php/webdav/', '', get_config('tool_oauth2owncloud', 'path'));
+        return get_config('tool_oauth2owncloud', 'protocol') . '://' . get_config('tool_oauth2owncloud', 'server')  . '/' . $path
                . 'index.php/apps/oauth2/api/v1/token';
     }
 
@@ -128,6 +131,58 @@ class sciebo extends \oauth2_client {
     public function callback() {
         $this->log_out();
         $this->is_logged_in();
+    }
+
+    /**
+     * Checks whether or not the current user or a technical user possesses a valid
+     * Access Token. If it can be upgraded from an Refresh Token the new Access Token
+     * gets stored in the settings.
+     *
+     * @param null|string $technical name of the plugin, which uses a technical user.
+     * @return bool false, if the Access Token is not valid. Otherwise, true.
+     */
+    public function check_login($technical = null) {
+
+        // If $technical is null, a personal token has to be checked (current user).
+        if ($technical == null) {
+
+            $user_token = unserialize(get_user_preferences('oC_token'));
+            $this->set_access_token($user_token);
+
+        } else {
+
+            // Otherwise a technical user's Access Token needs to be checked.
+            $technical_token = unserialize(get_config($technical, 'token'));
+            $this->set_access_token($technical_token);
+
+        }
+
+        // If an Access Token is available or can be refreshed, it is stored within the user specific
+        // preferences or the plugin settings (depending on $technical).
+        if ($this->is_logged_in()) {
+
+            // In both cases the Access Token needs to be serialized before it can be stored in the DB.
+            $tok = serialize($this->get_accesstoken());
+
+            if ($technical == null) {
+                set_user_preference('oC_token', $tok);
+            } else {
+                set_config('token', $tok, $technical);
+            }
+
+            return true;
+
+        } else {
+
+            // Otherwise it is set to null.
+            if ($technical == null) {
+                set_user_preference('oC_token', null);
+            } else {
+                set_config('token', null, $technical);
+            }
+
+            return false;
+        }
     }
 
     /**
@@ -204,6 +259,15 @@ class sciebo extends \oauth2_client {
     }
 
     /**
+     * This method calls the open() function of the webdav client.
+     *
+     * @return bool true on success. Otherwise false.
+     */
+    public function open() {
+        return $this->dav->open();
+    }
+
+    /**
      * The WebDav listing function is encapsulated into this helper function. Before the WebDAV function is called,
      * an Access Token is set within the Client to enable OAuth 2.0 authentication.
      *
@@ -263,7 +327,12 @@ class sciebo extends \oauth2_client {
      */
     public function move($src, $dst, $overwrite) {
         $this->dav->set_token($this->get_accesstoken()->token);
-        return $this->dav->move($src, $dst, $overwrite);
+
+        $source = '/' . get_config('tool_oauth2owncloud', 'path') . $src;
+
+        $destination = '/' . get_config('tool_oauth2owncloud', 'path') . $dst;
+
+        return $this->dav->move($source, $destination, $overwrite);
     }
 
     /**
@@ -272,11 +341,10 @@ class sciebo extends \oauth2_client {
      *
      * @param $path string path to the file or folder in ownCloud.
      * @param null $user string specific user to be shared with (optional).
-     * @return mixed response from ownCloud server or error message.
+     * @return array response from ownCloud server including status, code and link to the file.
      */
     public function get_link($path, $user = null) {
-
-        $pref = get_config('tool_oauth2sciebo', 'type') . '://';
+        $pref = get_config('tool_oauth2owncloud', 'protocol') . '://';
 
         // Depending on whether a public share or a specific user share is requested, the POST parameters are set.
         if ($user == null) {
@@ -292,10 +360,33 @@ class sciebo extends \oauth2_client {
                                             ), null, "&");
         }
 
-        $path = str_replace('remote.php/webdav/', '', get_config('tool_oauth2sciebo', 'path'));
 
-        return $this->post($pref . get_config('tool_oauth2sciebo', 'server') . '/' . $path .
+        $path = str_replace('remote.php/webdav/', '', get_config('tool_oauth2owncloud', 'path'));
+
+        // The share request gets POSTed.
+        $response = $this->post($pref . get_config('tool_oauth2owncloud', 'server') . '/' . $path .
                 'ocs/v1.php/apps/files_sharing/api/v1/shares', $query, array(), true);
+
+        $ret = array();
+
+        $xml = simplexml_load_string($response);
+        $ret['code'] = $xml->meta->statuscode;
+        $ret['status'] = $xml->meta->status;
+
+        // The link is generated, only if it is a public share.
+        if ($user == null) {
+
+            $fields = explode("/s/", $xml->data[0]->url[0]);
+            $fileid = $fields[1];
+
+            $p = str_replace('remote.php/webdav/', '', get_config('tool_oauth2owncloud', 'path'));
+
+            $ret['link'] = $pref . get_config('tool_oauth2owncloud', 'server') . '/' . $p .
+                    'public.php?service=files&t=' . $fileid . '&download';
+
+        }
+
+        return $ret;
     }
 
     /**

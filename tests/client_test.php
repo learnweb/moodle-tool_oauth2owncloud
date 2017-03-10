@@ -15,31 +15,31 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * OAuth 2.0 and WebDAV API tests for the oauth2sciebo admin tool.
+ * OAuth 2.0 and WebDAV API tests for the oauth2owncloud admin tool.
  *
- * @package    tool_oauth2sciebo
- * @copyright  2016 Westfälische Wilhelms-Universität Münster (WWU Münster)
+ * @package    tool_oauth2owncloud
+ * @copyright  2017 Westfälische Wilhelms-Universität Münster (WWU Münster)
  * @author     Projektseminar Uni Münster
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-class tool_oauth2sciebo_client_testcase extends advanced_testcase {
+class tool_oauth2owncloud_client_testcase extends advanced_testcase {
 
     /**
-     * The sciebo class is initialized and the required settings are set beforehand.
+     * The owncloud class is initialized and the required settings are set beforehand.
      */
     protected function setUp() {
         $this->resetAfterTest(true);
 
         // Setup some settings required for the Client.
-        set_config('clientid', 'testid', 'tool_oauth2sciebo');
-        set_config('secret', 'testsecret', 'tool_oauth2sciebo');
-        set_config('server', 'localhost', 'tool_oauth2sciebo');
-        set_config('path', 'owncloud/remote.php/webdav/', 'tool_oauth2sciebo');
-        set_config('port', '', 'tool_oauth2sciebo');
-        set_config('type', 'https', 'tool_oauth2sciebo');
+        set_config('clientid', 'testid', 'tool_oauth2owncloud');
+        set_config('secret', 'testsecret', 'tool_oauth2owncloud');
+        set_config('server', 'localhost', 'tool_oauth2owncloud');
+        set_config('path', 'owncloud/remote.php/webdav/', 'tool_oauth2owncloud');
+        set_config('port', '', 'tool_oauth2owncloud');
+        set_config('type', 'https', 'tool_oauth2owncloud');
 
         // Dummy callback URL.
         $returnurl = new moodle_url('/repository/repository_callback.php', [
@@ -48,7 +48,7 @@ class tool_oauth2sciebo_client_testcase extends advanced_testcase {
                 'sesskey'   => sesskey(),
         ]);
 
-        $this->client = new \tool_oauth2sciebo\sciebo($returnurl);
+        $this->client = new \tool_oauth2owncloud\owncloud($returnurl);
     }
 
     /**
@@ -72,13 +72,14 @@ class tool_oauth2sciebo_client_testcase extends advanced_testcase {
         $this->resetAfterTest(true);
 
         $this->assertEquals('https://localhost/owncloud/index.php/apps/oauth2/authorize',
-                $this->get_method_sciebo('auth_url')->invokeArgs($this->client, array()));
+                $this->get_method_owncloud('auth_url')->invokeArgs($this->client, array()));
         $this->assertEquals('https://localhost/owncloud/index.php/apps/oauth2/api/v1/token',
-                $this->get_method_sciebo('token_url')->invokeArgs($this->client, array()));
+                $this->get_method_owncloud('token_url')->invokeArgs($this->client, array()));
     }
 
     /**
      * The addition of the bearer auth. header for token based authentication is tested.
+     *
      * TODO: Implement the test.
      * TODO: Maybe Reflections could work?
      */
@@ -89,12 +90,13 @@ class tool_oauth2sciebo_client_testcase extends advanced_testcase {
     }
 
     /**
-     * Helper method to access a specific pretected or private method from the class sciebo.
-     * @param $name name of the method.
+     * Helper method to access a specific protected or private method from the class owncloud.
+     *
+     * @param $name string name of the method.
      * @return ReflectionMethod exact method.
      */
-    protected function get_method_sciebo($name) {
-        $tmp = new ReflectionClass(\tool_oauth2sciebo\sciebo::class);
+    protected function get_method_owncloud($name) {
+        $tmp = new ReflectionClass(\tool_oauth2owncloud\owncloud::class);
         $method = $tmp->getMethod($name);
         $method->setAccessible(true);
         return $method;
