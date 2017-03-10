@@ -32,4 +32,3 @@ $plugin->requires  = 2016051900;        // Requires this Moodle version.
 $plugin->maturity = MATURITY_ALPHA;
 $plugin->cron = 0;
 $plugin->dependencies = array();
-
