@@ -134,6 +134,58 @@ class owncloud extends \oauth2_client {
     }
 
     /**
+     * Checks whether or not the current user or a technical user possesses a valid
+     * Access Token. If it can be upgraded from an Refresh Token the new Access Token
+     * gets stored in the settings.
+     *
+     * @param null|string $technical name of the plugin, which uses a technical user.
+     * @return bool false, if the Access Token is not valid. Otherwise, true.
+     */
+    public function check_login($technical = null) {
+
+        // If $technical is null, a personal token has to be checked (current user).
+        if ($technical == null) {
+
+            $user_token = unserialize(get_user_preferences('oC_token'));
+            $this->set_access_token($user_token);
+
+        } else {
+
+            // Otherwise a technical user's Access Token needs to be checked.
+            $technical_token = unserialize(get_config($technical, 'token'));
+            $this->set_access_token($technical_token);
+
+        }
+
+        // If an Access Token is available or can be refreshed, it is stored within the user specific
+        // preferences or the plugin settings (depending on $technical).
+        if ($this->is_logged_in()) {
+
+            // In both cases the Access Token needs to be serialized before it can be stored in the DB.
+            $tok = serialize($this->get_accesstoken());
+
+            if ($technical == null) {
+                set_user_preference('oC_token', $tok);
+            } else {
+                set_config('token', $tok, $technical);
+            }
+
+            return true;
+
+        } else {
+
+            // Otherwise it is set to null.
+            if ($technical == null) {
+                set_user_preference('oC_token', null);
+            } else {
+                set_config('token', null, $technical);
+            }
+
+            return false;
+        }
+    }
+
+    /**
      * Redirects to the parent method after checking the Refresh Token.
      *
      * @return bool true, if Access Token is set.
@@ -289,10 +341,9 @@ class owncloud extends \oauth2_client {
      *
      * @param $path string path to the file or folder in ownCloud.
      * @param null $user string specific user to be shared with (optional).
-     * @return mixed response from ownCloud server or error message.
+     * @return array response from ownCloud server including status, code and link to the file.
      */
     public function get_link($path, $user = null) {
-
         $pref = get_config('tool_oauth2owncloud', 'protocol') . '://';
 
         // Depending on whether a public share or a specific user share is requested, the POST parameters are set.
@@ -309,10 +360,31 @@ class owncloud extends \oauth2_client {
                                             ), null, "&");
         }
 
+
         $path = str_replace('remote.php/webdav/', '', get_config('tool_oauth2owncloud', 'path'));
 
-        return $this->post($pref . get_config('tool_oauth2owncloud', 'server') . '/' . $path .
+        // The share request gets POSTed.
+        $response = $this->post($pref . get_config('tool_oauth2owncloud', 'server') . '/' . $path .
                 'ocs/v1.php/apps/files_sharing/api/v1/shares', $query, array(), true);
+
+        $ret = array();
+
+        $xml = simplexml_load_string($response);
+        $ret['code'] = $xml->meta->statuscode;
+        $ret['status'] = $xml->meta->status;
+
+        // The link is generated.
+        $fields = explode("/s/", $xml->data[0]->url[0]);
+        $fileid = $fields[1];
+
+        $p = str_replace('remote.php/webdav/', '', get_config('tool_oauth2owncloud', 'path'));
+
+        // This link will only work with a public share. Therefore, do not use it in combination with
+        // a user specific share!
+        $ret['link'] = $pref . get_config('tool_oauth2owncloud', 'server'). '/' . $p .
+        'public.php?service=files&t=' . $fileid . '&download';
+
+        return $ret;
     }
 
     /**
