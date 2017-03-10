@@ -62,9 +62,11 @@ class tool_oauth2owncloud_client_form extends moodleform {
         $mform->setDefault('path', $this->_customdata['path']);
         $mform->setType('path', PARAM_PATH);
         // Type of server.
+
         $mform->addElement('select', 'protocol', get_string('protocol', 'tool_oauth2owncloud'), array('http' => 'HTTP', 'https' => 'HTTPS'));
         $mform->addRule('protocol', get_string('required'), 'required', null, 'client');
         $mform->setDefault('protocol', $this->_customdata['protocol']);
+
         // Port of server.
         $mform->addElement('text', 'port', get_string('port', 'tool_oauth2owncloud'), array('size' => '8'));
         $mform->addRule('port', get_string('err_numeric', 'form'), 'numeric', null, 'client');
