@@ -373,16 +373,18 @@ class owncloud extends \oauth2_client {
         $ret['code'] = $xml->meta->statuscode;
         $ret['status'] = $xml->meta->status;
 
-        // The link is generated.
-        $fields = explode("/s/", $xml->data[0]->url[0]);
-        $fileid = $fields[1];
+        // The link is generated, only if it is a public share.
+        if ($user == null) {
 
-        $p = str_replace('remote.php/webdav/', '', get_config('tool_oauth2owncloud', 'path'));
+            $fields = explode("/s/", $xml->data[0]->url[0]);
+            $fileid = $fields[1];
 
-        // This link will only work with a public share. Therefore, do not use it in combination with
-        // a user specific share!
-        $ret['link'] = $pref . get_config('tool_oauth2owncloud', 'server'). '/' . $p .
-        'public.php?service=files&t=' . $fileid . '&download';
+            $p = str_replace('remote.php/webdav/', '', get_config('tool_oauth2owncloud', 'path'));
+
+            $ret['link'] = $pref . get_config('tool_oauth2owncloud', 'server') . '/' . $p .
+                    'public.php?service=files&t=' . $fileid . '&download';
+
+        }
 
         return $ret;
     }
