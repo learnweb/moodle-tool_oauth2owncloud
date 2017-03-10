@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -16,17 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * access.php for oauth2sciebo admin tool
+ * access.php for oauth2owncloud admin tool.
  *
- * @package    tool_oauth2sciebo
- * @copyright  2016 Westfälische Wilhelms-Universität Münster (WWU Münster)
+ * @package    tool_oauth2owncloud
+ * @copyright  2017 Westfälische Wilhelms-Universität Münster (WWU Münster)
  * @author     Projektseminar Uni Münster
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
-    'tool/oauth2sciebo:view' => array(
+    'tool/oauth2owncloud:view' => array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => array(
@@ -34,4 +34,3 @@ $capabilities = array(
         )
     )
 );
-
