@@ -62,7 +62,7 @@ class tool_oauth2sciebo_client_form extends moodleform {
         $mform->setDefault('path', $this->_customdata['path']);
         $mform->setType('path', PARAM_PATH);
         // Type of server.
-        $mform->addElement('select', 'type', get_string('type', 'tool_oauth2sciebo'), array('http' => 'HTTP', 'https' => 'HTTPS'));
+        $mform->addElement('select', 'type', get_string('protocol', 'tool_oauth2sciebo'), array('http' => 'HTTP', 'https' => 'HTTPS'));
         $mform->addRule('type', get_string('required'), 'required', null, 'client');
         $mform->setDefault('type', $this->_customdata['type']);
         // Port of server.

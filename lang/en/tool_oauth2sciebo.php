@@ -35,6 +35,7 @@ $string['secret'] = 'Secret';
 $string['server'] = 'ownCloud Server';
 $string['path'] = 'ownCloud Path';
 $string['type'] = 'Type';
+$string['protocol'] = 'Protocol';
 $string['port'] = 'Port';
 $string['oauthlegend'] = 'OAuth 2.0:';
 $string['webdavlegend'] = 'WebDAV:';
