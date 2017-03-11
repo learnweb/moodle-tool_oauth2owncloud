@@ -25,7 +25,40 @@
 
 defined('MOODLE_INTERNAL') || die('moodle_internal not defined');
 
-// Settings for the OAuth 2.0 and WebDAV clients are managed on an external page.
-$ADMIN->add('tools', new admin_externalpage('tool_oauth2owncloud/auth',
-        'owncloud OAuth 2.0 Configuration',
-        "$CFG->wwwroot/$CFG->admin/tool/oauth2owncloud/index.php"));
+if ($hassiteconfig) {
+    $url = $CFG->wwwroot . '/' . $CFG->admin . '/tool/oauth2owncloud/index.php';
+    $settings = new admin_settingpage('oauth2owncloud', 'owncloud OAuth 2.0 Configuration',
+        'moodle/site:config', false);
+    $settings->add(new admin_setting_configtext('tool_oauth2owncloud/clientid',
+        get_string('clientid', 'tool_oauth2owncloud'),
+        get_string('clientid', 'tool_oauth2owncloud'), '', PARAM_TEXT, '64'));
+    $setting = new admin_setting_configpasswordunmask('tool_oauth2owncloud/secret',
+        get_string('secret', 'tool_oauth2owncloud'),
+        get_string('secret', 'tool_oauth2owncloud'), '', PARAM_TEXT, '64');
+    $settings->add($setting);
+    $setting = new admin_setting_configtext('tool_oauth2owncloud/server',
+        get_string('server', 'tool_oauth2owncloud'),
+        get_string('server', 'tool_oauth2owncloud'), '', PARAM_TEXT, '64');
+    $settings->add($setting);
+    $setting = new admin_setting_configtext('tool_oauth2owncloud/path',
+        get_string('path', 'tool_oauth2owncloud'),
+        get_string('path', 'tool_oauth2owncloud'), '', PARAM_TEXT, '64');
+    $settings->add($setting);
+    // $name, $visiblename, $description, $defaultsetting, $choices
+    /*$mform->addElement('select', 'protocol', get_string('protocol', 'tool_oauth2owncloud'), array('http' => 'HTTP', 'https' => 'HTTPS'));
+    $mform->addRule('protocol', get_string('required'), 'required', null, 'client');
+    $mform->setDefault('protocol', $this->_customdata['protocol']);*/
+    $setting = new admin_setting_configselect('tool_oauth2owncloud/protocol',
+        get_string('protocol', 'tool_oauth2owncloud'),
+        get_string('protocol', 'tool_oauth2owncloud'), 'https', array('http' => 'HTTP', 'https' => 'HTTPS'));
+    $settings->add($setting);
+    // Port of server.
+    /*$mform->addElement('text', 'port', get_string('port', 'tool_oauth2owncloud'), array('size' => '8'));
+    $mform->addRule('port', get_string('err_numeric', 'form'), 'numeric', null, 'client');
+    $mform->setDefault('port', $this->_customdata['port']);
+    $mform->setType('port', PARAM_INT);*/
+    $setting = new admin_setting_configtext('tool_oauth2owncloud/port',
+        get_string('err_numeric', 'form'), 'numeric', 80, PARAM_TEXT, '8');
+    $settings->add($setting);
+    $ADMIN->add('tools', $settings);
+}

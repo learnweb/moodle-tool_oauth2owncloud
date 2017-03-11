@@ -94,13 +94,14 @@ class owncloud extends \oauth2_client {
      * @return bool false, if data is missing. Otherwise, true.
      */
     public function check_data() {
+
         if (empty(get_config('tool_oauth2owncloud', 'clientid')) ||
                 empty(get_config('tool_oauth2owncloud', 'secret')) ||
                 empty(get_config('tool_oauth2owncloud', 'server')) ||
                 empty(get_config('tool_oauth2owncloud', 'path')) ||
                 empty(get_config('tool_oauth2owncloud', 'protocol'))) {
 
-            global $CFG, $OUTPUT;
+                                                                     global $CFG, $OUTPUT;
             $link = $CFG->wwwroot.'/'.$CFG->admin.'/tool/oauth2owncloud/index.php';
 
             // Generates a link to the external admin setting page.
