@@ -90,6 +90,8 @@ class owncloud extends \oauth2_client {
      * Helper method, that checks the admin settings regarding the OAuth 2.0 and WebDAV clients required for this
      * plugin. If at least one of the settings is empty, a warning is printed with a link which redirects to the
      * external setting page of the plugin.
+     *
+     * @return bool false, if data is missing. Otherwise, true.
      */
     public function check_data() {
         if (empty(get_config('tool_oauth2owncloud', 'clientid')) ||
@@ -102,9 +104,11 @@ class owncloud extends \oauth2_client {
             $link = $CFG->wwwroot.'/'.$CFG->admin.'/tool/oauth2owncloud/index.php';
 
             // Generates a link to the external admin setting page.
-            echo $OUTPUT->notification('<a href="'.$link.'" target="_blank" rel=>"noopener noreferrer">
+            echo $OUTPUT->notification('<a href="'.$link.'" target="_blank" rel="noopener noreferrer">
             '.get_string('missing_settings', 'tool_oauth2owncloud').'</a>', 'warning');
-        }
+
+            return false;
+        } else return true;
     }
 
     /**

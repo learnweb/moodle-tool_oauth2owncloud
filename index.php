@@ -30,8 +30,6 @@ require(__DIR__ . '/client_form.php');
 
 admin_externalpage_setup('tool_oauth2owncloud/auth');
 
-echo $OUTPUT->header();
-
 // The default form values are initialized.
 $elements = array("clientid", "secret", "server", "path");
 $arr = array();
@@ -89,6 +87,8 @@ if ($mform->is_cancelled()) {
         redirect(new moodle_url('/my/'));
     }
 }
+
+echo $OUTPUT->header();
 
 $mform->display();
 
