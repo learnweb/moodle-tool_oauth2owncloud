@@ -24,72 +24,27 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require('../../../config.php');
-require($CFG->libdir . '/adminlib.php');
-require(__DIR__ . '/client_form.php');
 
-admin_externalpage_setup('tool_oauth2owncloud/auth');
+require_once(dirname(__FILE__) . '/../../../config.php');
+
+require_once($CFG->libdir.'/adminlib.php');
+
+$PAGE->set_context(context_system::instance());
+$context = context_system::instance();
+// Check permissions.
+require_login();
+require_capability('moodle/site:config', $context);
+
+admin_externalpage_setup('oauth2owncloud');
+
+$pagetitle = get_string('pluginname', 'tool_oauth2owncloud');
+$PAGE->set_title(get_string('pluginname', 'tool_oauth2owncloud'));
+$PAGE->set_heading(get_string('pluginname', 'tool_oauth2owncloud'));
+$PAGE->set_pagelayout('standard');
+$content = '';
 
 echo $OUTPUT->header();
 
-// The default form values are initialized.
-$elements = array("clientid", "secret", "server", "path");
-$arr = array();
-
-foreach ($elements as $e) {
-
-    $def = get_config('tool_oauth2owncloud', $e);
-
-    if ($def == null) {
-        $arr[$e] = '';
-    } else {
-        $arr[$e] = $def;
-    }
-}
-
-if (get_config('tool_oauth2owncloud', 'protocol') == null) {
-    $arr['protocol'] = 'https';
-} else {
-    $arr['protocol'] = get_config('tool_oauth2owncloud', 'protocol');
-}
-
-if (get_config('tool_oauth2owncloud', 'port') == null || empty(get_config('tool_oauth2owncloud', 'port'))) {
-    if ($arr['protocol'] == 'http') {
-        $arr['port'] = 80;
-    } else {
-        $arr['port'] = 443;
-    }
-} else {
-    $arr['port'] = get_config('tool_oauth2owncloud', 'port');
-}
-
-$mform = new tool_oauth2owncloud_client_form(null, $arr);
-
-
-// If the cancel button has been pressed, the setting page is left.
-if ($mform->is_cancelled()) {
-    redirect(new moodle_url('/my/'));
-} else if ($fromform = $mform->get_data()) {
-    if (isset($fromform->submitbutton)) {
-        // If the settings were submitted and validated, they are saved into the Admin Tree to be accessible by the client.
-        set_config('clientid', $fromform->clientid, 'tool_oauth2owncloud');
-        set_config('secret', $fromform->secret, 'tool_oauth2owncloud');
-        set_config('server', $fromform->server, 'tool_oauth2owncloud');
-        set_config('path', $fromform->path, 'tool_oauth2owncloud');
-        set_config('port', $fromform->port, 'tool_oauth2owncloud');
-        set_config('protocol', $fromform->protocol, 'tool_oauth2owncloud');
-    } else if (isset($fromform->reset)) {
-        // If the reset button has been pressed, all settings are reset in the Admin Tree.
-        set_config('clientid', '', 'tool_oauth2owncloud');
-        set_config('secret', '', 'tool_oauth2owncloud');
-        set_config('server', '', 'tool_oauth2owncloud');
-        set_config('path', '', 'tool_oauth2owncloud');
-        set_config('port', '', 'tool_oauth2owncloud');
-        set_config('protocol', '', 'tool_oauth2owncloud');
-        redirect(new moodle_url('/my/'));
-    }
-}
-
-$mform->display();
+echo $content;
 
 echo $OUTPUT->footer();
