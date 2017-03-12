@@ -36,4 +36,6 @@ $string['path'] = 'ownCloud Path';
 $string['protocol'] = 'Protocol';
 $string['port'] = 'Port';
 $string['oauthlegend'] = 'OAuth 2.0:';
+$string['oauthinfo'] = 'Settings for the OAuth 2.0 client.';
 $string['webdavlegend'] = 'WebDAV:';
+$string['webdavinfo'] = 'Settings for the WebDAV client.';
