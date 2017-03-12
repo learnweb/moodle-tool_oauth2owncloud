@@ -27,6 +27,8 @@ defined('MOODLE_INTERNAL') || die();
 
 class tool_oauth2owncloud_client_testcase extends advanced_testcase {
 
+    private $client = null;
+
     /**
      * The owncloud class is initialized and the required settings are set beforehand.
      */
