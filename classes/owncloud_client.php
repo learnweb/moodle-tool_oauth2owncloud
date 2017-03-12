@@ -530,13 +530,12 @@ class owncloud_client {
     // --------------------------------------------------------------------------
     // public method move
     // move/rename a file/collection on webdav server
-    public function move($src_path, $dst_path, $overwrite) {
+    public function move($srcpath, $dstpath, $overwrite) {
 
-        //$this->_path = $this->translate_uri($src_path);
-        $this->_path = $src_path;
+        $this->_path = $srcpath;
         $this->header_unset();
         $this->create_basic_request('MOVE');
-        $this->header_add(sprintf('Destination: http://%s%s', $this->_server, $this->translate_uri($dst_path)));
+        $this->header_add(sprintf('Destination: http://%s%s', $this->_server, $this->translate_uri($dstpath)));
         if ($overwrite) {
             $this->header_add('Overwrite: T');
         } else {

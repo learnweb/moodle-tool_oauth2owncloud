@@ -35,13 +35,13 @@ class owncloud extends \oauth2_client {
     /** @var null|owncloud_client webdav client which is used for webdav operations. */
     private $dav = null;
 
-    private $prefix_webdav = null;
+    private $prefixwebdav = null;
 
-    private $webdav_port = null;
+    private $webdavport = null;
 
-    private $webdav_type = null;
+    private $webdavtype = null;
 
-    private $prefix_oc = null;
+    private $prefixoc = null;
 
     /**
      * Create the ownCloud OAuth 2.0 and WebDAV clients. The required data for both clients is fetched from the
@@ -59,30 +59,30 @@ class owncloud extends \oauth2_client {
             return;
         }
         if ('http' == (get_config('tool_oauth2owncloud', 'protocol'))) {
-            $this->webdav_type = '';
+            $this->webdavtype = '';
         } else {
-            $this->webdav_type = 'ssl://';
+            $this->webdavtype = 'ssl://';
         }
         if (empty(get_config('tool_oauth2owncloud', 'port'))) {
-            if (empty($this->webdav_type)) {
-                $this->webdav_port = 80;
+            if (empty($this->webdavtype)) {
+                $this->webdavport = 80;
             } else {
-                $this->webdav_port = 443;
+                $this->webdavport = 443;
             }
         } else {
-            $this->webdav_port = get_config('tool_oauth2owncloud', 'port');
+            $this->webdavport = get_config('tool_oauth2owncloud', 'port');
         }
 
         $this->dav = new owncloud_client(get_config('tool_oauth2owncloud', 'server'),
-            '', '', 'bearer', $this->webdav_type);
-        $this->dav->port = $this->webdav_port;
+            '', '', 'bearer', $this->webdavtype);
+        $this->dav->port = $this->webdavport;
         $this->dav->debug = false;
 
-        $this->prefix_webdav = rtrim('/'.ltrim(get_config('tool_oauth2owncloud', 'path'), '/ '), '/ ');
+        $this->prefixwebdav = rtrim('/'.ltrim(get_config('tool_oauth2owncloud', 'path'), '/ '), '/ ');
 
         $p = str_replace('remote.php/webdav/', '', get_config('tool_oauth2owncloud', 'path'));
 
-        $this->prefix_oc = get_config('tool_oauth2owncloud', 'protocol') .
+        $this->prefixoc = get_config('tool_oauth2owncloud', 'protocol') .
                 '://' . get_config('tool_oauth2owncloud', 'server')  . '/' . $p;
     }
 
@@ -109,7 +109,9 @@ class owncloud extends \oauth2_client {
             '.get_string('missing_settings', 'tool_oauth2owncloud').'</a>', 'warning');
 
             return false;
-        } else return true;
+        } else {
+            return true;
+        }
     }
 
     /**
@@ -119,7 +121,7 @@ class owncloud extends \oauth2_client {
      */
     protected function auth_url() {
         // Dynamically generated from the admin tool settings.
-        return $this->prefix_oc . 'index.php/apps/oauth2/authorize';
+        return $this->prefixoc . 'index.php/apps/oauth2/authorize';
     }
 
     /**
@@ -128,7 +130,7 @@ class owncloud extends \oauth2_client {
      * @return string the token url
      */
     protected function token_url() {
-        return $this->prefix_oc . 'index.php/apps/oauth2/api/v1/token';
+        return $this->prefixoc . 'index.php/apps/oauth2/api/v1/token';
     }
 
     /**
@@ -162,14 +164,14 @@ class owncloud extends \oauth2_client {
         // If $technical is null, a personal token has to be checked (current user).
         if ($technical == null) {
 
-            $user_token = unserialize(get_user_preferences('oC_token'));
-            $this->set_access_token($user_token);
+            $usertoken = unserialize(get_user_preferences('oC_token'));
+            $this->set_access_token($usertoken);
 
         } else {
 
             // Otherwise a technical user's Access Token needs to be checked.
-            $technical_token = unserialize(get_config($technical, 'token'));
-            $this->set_access_token($technical_token);
+            $technicaltoken = unserialize(get_config($technical, 'token'));
+            $this->set_access_token($technicaltoken);
 
         }
 
@@ -292,7 +294,7 @@ class owncloud extends \oauth2_client {
      */
     public function get_listing($path) {
         $this->dav->set_token($this->get_accesstoken()->token);
-        return $this->dav->ls($this->prefix_webdav . $path);
+        return $this->dav->ls($this->prefixwebdav . $path);
     }
 
     /**
@@ -305,7 +307,7 @@ class owncloud extends \oauth2_client {
      */
     public function get_file($source, $local) {
         $this->dav->set_token($this->get_accesstoken()->token);
-        return $this->dav->get_file($this->prefix_webdav . $source, $local);
+        return $this->dav->get_file($this->prefixwebdav . $source, $local);
     }
 
     /**
@@ -317,7 +319,7 @@ class owncloud extends \oauth2_client {
      */
     public function make_folder($path) {
         $this->dav->set_token($this->get_accesstoken()->token);
-        return $this->dav->mkcol($this->prefix_webdav . $path);
+        return $this->dav->mkcol($this->prefixwebdav . $path);
     }
 
     /**
@@ -329,7 +331,7 @@ class owncloud extends \oauth2_client {
      */
     public function delete_folder($path) {
         $this->dav->set_token($this->get_accesstoken()->token);
-        return $this->dav->delete($this->prefix_webdav . $path);
+        return $this->dav->delete($this->prefixwebdav . $path);
     }
 
     /**
@@ -344,9 +346,9 @@ class owncloud extends \oauth2_client {
     public function move($src, $dst, $overwrite) {
         $this->dav->set_token($this->get_accesstoken()->token);
 
-        $source = $this->prefix_webdav . $src;
+        $source = $this->prefixwebdav . $src;
 
-        $destination = $this->prefix_webdav . $dst;
+        $destination = $this->prefixwebdav . $dst;
 
         return $this->dav->move($source, $destination, $overwrite);
     }
@@ -375,7 +377,7 @@ class owncloud extends \oauth2_client {
         }
 
         // The share request gets POSTed.
-        $response = $this->post($this->prefix_oc . 'ocs/v1.php/apps/files_sharing/api/v1/shares', $query, array(), true);
+        $response = $this->post($this->prefixoc . 'ocs/v1.php/apps/files_sharing/api/v1/shares', $query, array(), true);
 
         $ret = array();
 
@@ -389,7 +391,7 @@ class owncloud extends \oauth2_client {
             $fields = explode("/s/", $xml->data[0]->url[0]);
             $fileid = $fields[1];
 
-            $ret['link'] = $this->prefix_oc . 'public.php?service=files&t=' . $fileid . '&download';
+            $ret['link'] = $this->prefixoc . 'public.php?service=files&t=' . $fileid . '&download';
         }
 
         return $ret;
