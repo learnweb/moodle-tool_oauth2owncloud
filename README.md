@@ -13,7 +13,7 @@ This plugin should go into `admin/tool/oauth2owncloud`.
 
 ### Admin Setting
 
-To enable the plugin the site admin has to fill in the settings form. This Form is available under the path `Website-Administration>Plugins>Admin tools>ownCloud OAuth 2.0 Configuration`.
+To enable the plugin the site admin has to fill in the settings form. This Form is available under the path `Website-Administration ► Plugins ► Admin tools ► ownCloud OAuth 2.0 Configuration`.
 
 ![Plugin-Struktur](pix/OAuth2Form.png)
 
@@ -42,7 +42,7 @@ Das Plugin wurde geschrieben von dem [Projektseminar Sciebo@Learnweb](https://gi
 
 Damit das OAuth 2 Protokoll reibungslos ablaufen kann, muss zuerst der Client in den Einstellungen registriert werden.
 
-Hierfür muss der Administrator das Formular des Plugins, das unter `Website-Administration>Plugins>Plugins>Admin tools>ownCloud OAuth 2.0 Configuration` zu finden ist, ausfüllen.
+Hierfür muss der Administrator das Formular des Plugins, das unter `Website-Administration ► Plugins ► Plugins ► Admin tools ► ownCloud OAuth 2.0 Configuration` zu finden ist, ausfüllen.
 
 ![Plugin-Struktur](pix/OAuth2Form.png)
 
