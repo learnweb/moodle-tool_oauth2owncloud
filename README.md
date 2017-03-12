@@ -3,9 +3,10 @@
 # English
 [![Build Status](https://travis-ci.org/pssl16/moodle-tool_oauth2owncloud.svg?branch=master)]
 (https://travis-ci.org/pssl16/moodle-tool_oauth2sciebo)</br>
-This Plugin connects owncloud with Moodle with OAuth2. It will later serve the following Plugins:
-[Repository sciebo](https://github.com/pssl16/moodle-repository_sciebo)
-[Activity Plugin CollaborativeFolders](https://github.com/pssl16/moodle-mod_collaborativefolders)
+This Plugin connects ownCloud with Moodle with the OAuth2 Protocol. It will later serve the following Plugins:
+[Repository sciebo](https://github.com/pssl16/moodle-repository_sciebo) and 
+[Activity Plugin CollaborativeFolders](https://github.com/pssl16/moodle-mod_collaborativefolders).
+
 Written and maintained by
 [ProjectsSeminar of the University of Muenster](https://github.com/pssl16).
 # Installation
@@ -13,7 +14,9 @@ This plugin should go into `admin/tool/oauth2owncloud`.
 
 ### Admin Setting
 
-To enable the plugin the site admin has to fill in the settings form. This Form is available under the path `Website-Administration ► Plugins ► Admin tools ► ownCloud OAuth 2.0 Configuration`.
+To enable the plugin the site admin has to fill in the settings form. This Form is available under the path
+ 
+ `Website-Administration ► Plugins ► Admin tools ► ownCloud OAuth 2.0 Configuration`.
 
 ![Plugin-Struktur](pix/OAuth2Form.png)
 
@@ -32,9 +35,11 @@ For additional information please visit our [documentation page](https://pssl16.
 # Deutsch
 [![Build Status](https://travis-ci.org/pssl16/moodle-tool_oauth2owncloud.svg?branch=master)]
 (https://travis-ci.org/pssl16/moodle-tool_oauth2sciebo)</br>
-Dieses Plugin ermöglicht die Authentifizierung mittels des OAuth2 Protokolls für das [Repository sciebo](https://github.com/pssl16/moodle-repository_sciebo) oder das
-[Activity Plugin CollaborativeFolders](https://github.com/pssl16/moodle-mod_collaborativefolders)
-Das Plugin wurde geschrieben von dem [Projektseminar Sciebo@Learnweb](https://github.com/pssl16) der Westfälischen Wilhelms-Universität von Münster.
+Dieses Plugin ermöglicht die Authentifizierung mittels des OAuth2 Protokolls für das [Repository sciebo](https://github.com/pssl16/moodle-repository_sciebo) <
+und/oder das
+[Activity Plugin CollaborativeFolders](https://github.com/pssl16/moodle-mod_collaborativefolders).
+
+Das Plugin wurde geschrieben von dem [Projektseminar Sciebo@Learnweb](https://github.com/pssl16) der Westfälischen Wilhelms-Universität Münster.
 # Installation
  Das Plugin muss in `admin/tool/oauth2owncloud` platziert werden.
 
