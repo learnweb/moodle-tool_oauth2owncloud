@@ -39,3 +39,4 @@ $string['oauthlegend'] = 'OAuth 2.0:';
 $string['oauthinfo'] = 'Settings for the OAuth 2.0 client.';
 $string['webdavlegend'] = 'WebDAV:';
 $string['webdavinfo'] = 'Settings for the WebDAV client.';
+$string['oauth2app'] = 'In order to be able to use this plugin\'s features, you need to have the {$a} installed and enabled.';

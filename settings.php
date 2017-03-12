@@ -32,6 +32,16 @@ if ($hassiteconfig) {
     $settings = new admin_settingpage('oauth2owncloud', 'ownCloud OAuth 2.0 Configuration',
         'moodle/site:config', false);
 
+    // Link to the OAuth 2.0 ownCloud App repository on github.
+    $link = 'https://github.com/owncloud/oauth2';
+
+    // Generates a netification to remind the administrator of the ownCloud App.
+    $output = $OUTPUT->notification(get_string('oauth2app', 'tool_oauth2owncloud',
+            '<a href="'.$link.'" target="_blank" rel="noopener noreferrer">OAuth 2.0 App</a>'), 'warning');
+
+    $setting = new admin_setting_heading('tool_oauth2owncloud/oauth2app', $output, '');
+    $settings->add($setting);
+
     $setting = new admin_setting_heading('tool_oauth2owncloud/oauth2', get_string('oauthlegend', 'tool_oauth2owncloud'),
             get_string('oauthinfo', 'tool_oauth2owncloud'));
     $settings->add($setting);
