@@ -152,40 +152,40 @@ class owncloud extends \oauth2_client {
     }
 
     /**
-     * Checks whether or not the current user or a technical user possesses a valid
-     * Access Token. If it can be upgraded from an Refresh Token the new Access Token
-     * gets stored in the settings.
+     * Checks whether or not the current user or a specific module (e.g. in form of a
+     * technical user) possesses a valid Access Token. If it can be upgraded from an
+     * Refresh Token the new Access Token gets stored in the settings.
      *
-     * @param null|string $technical name of the plugin, which uses a technical user.
+     * @param null|string $modulename name of the plugin, which stores a seperate Access Token.
      * @return bool false, if the Access Token is not valid. Otherwise, true.
      */
-    public function check_login($technical = null) {
+    public function check_login($modulename = null) {
 
-        // If $technical is null, a personal token has to be checked (current user).
-        if ($technical == null) {
+        // If $modulename is null, a personal token has to be checked (current user).
+        if ($modulename == null) {
 
             $usertoken = unserialize(get_user_preferences('oC_token'));
             $this->set_access_token($usertoken);
 
         } else {
 
-            // Otherwise a technical user's Access Token needs to be checked.
-            $technicaltoken = unserialize(get_config($technical, 'token'));
-            $this->set_access_token($technicaltoken);
+            // Otherwise, the Access Token is fetched from the module's settings.
+            $moduletoken = unserialize(get_config($modulename, 'token'));
+            $this->set_access_token($moduletoken);
 
         }
 
         // If an Access Token is available or can be refreshed, it is stored within the user specific
-        // preferences or the plugin settings (depending on $technical).
+        // preferences or the module settings (depending on $modulename).
         if ($this->is_logged_in()) {
 
             // In both cases the Access Token needs to be serialized before it can be stored in the DB.
             $tok = serialize($this->get_accesstoken());
 
-            if ($technical == null) {
+            if ($modulename == null) {
                 set_user_preference('oC_token', $tok);
             } else {
-                set_config('token', $tok, $technical);
+                set_config('token', $tok, $modulename);
             }
 
             return true;
@@ -193,10 +193,10 @@ class owncloud extends \oauth2_client {
         } else {
 
             // Otherwise it is set to null.
-            if ($technical == null) {
+            if ($modulename == null) {
                 set_user_preference('oC_token', null);
             } else {
-                set_config('token', null, $technical);
+                set_config('token', null, $modulename);
             }
 
             return false;
