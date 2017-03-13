@@ -102,7 +102,7 @@ class owncloud extends \oauth2_client {
                 empty(get_config('tool_oauth2owncloud', 'protocol'))) {
 
                                                                      global $CFG, $OUTPUT;
-            $link = $CFG->wwwroot.'/'.$CFG->admin.'/tool/oauth2owncloud/index.php';
+            $link = $CFG->wwwroot.'/'.$CFG->admin.'/settings.php?section=oauth2owncloud';
 
             // Generates a link to the external admin setting page.
             echo $OUTPUT->notification('<a href="'.$link.'" target="_blank" rel="noopener noreferrer">
