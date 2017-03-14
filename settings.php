@@ -48,12 +48,12 @@ if ($hassiteconfig) {
 
     $setting = new admin_setting_configtext('tool_oauth2owncloud/clientid',
             get_string('clientid', 'tool_oauth2owncloud'),
-            '', '', PARAM_ALPHANUM, '64');
+            get_string('help_oauth_param', 'tool_oauth2owncloud', 'client identifier'), '', PARAM_ALPHANUM, '64');
     $settings->add($setting);
 
     $setting = new admin_setting_configpasswordunmask('tool_oauth2owncloud/secret',
         get_string('secret', 'tool_oauth2owncloud'),
-            '', '', PARAM_ALPHANUM, '64');
+        get_string('help_oauth_param', 'tool_oauth2owncloud', 'secret'), '', PARAM_ALPHANUM, '64');
     $settings->add($setting);
 
     $setting = new admin_setting_heading('tool_oauth2owncloud/webdav', get_string('webdavlegend', 'tool_oauth2owncloud'),
@@ -62,22 +62,22 @@ if ($hassiteconfig) {
 
     $setting = new admin_setting_configtext('tool_oauth2owncloud/server',
         get_string('server', 'tool_oauth2owncloud'),
-            '', '', PARAM_HOST, '64');
+            get_string('help_server','tool_oauth2owncloud'), '', PARAM_HOST, '64');
     $settings->add($setting);
 
     $setting = new admin_setting_configtext('tool_oauth2owncloud/path',
         get_string('path', 'tool_oauth2owncloud'),
-            '', '', PARAM_PATH, '64');
+        get_string('help_path','tool_oauth2owncloud'), '', PARAM_PATH, '64');
     $settings->add($setting);
 
     $setting = new admin_setting_configselect('tool_oauth2owncloud/protocol',
         get_string('protocol', 'tool_oauth2owncloud'),
-            '', 'https', array('http' => 'HTTP', 'https' => 'HTTPS'));
+        get_string('help_protocol','tool_oauth2owncloud'), 'https', array('http' => 'HTTP', 'https' => 'HTTPS'));
     $settings->add($setting);
 
     // Port of server.
     $setting = new admin_setting_configtext('tool_oauth2owncloud/port',
-        get_string('port', 'tool_oauth2owncloud'), get_string('err_numeric', 'form'), 443, PARAM_INT, '8');
+        get_string('port', 'tool_oauth2owncloud'), get_string('help_port','tool_oauth2owncloud'), 443, PARAM_INT, '8');
     $settings->add($setting);
 
     $ADMIN->add('tools', $settings);
