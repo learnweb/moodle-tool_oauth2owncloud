@@ -98,10 +98,10 @@ class owncloud extends \oauth2_client {
     public function check_data() {
 
         if (empty(get_config('tool_oauth2owncloud', 'clientid')) ||
-                empty(get_config('tool_oauth2owncloud', 'secret')) ||
-                empty(get_config('tool_oauth2owncloud', 'server')) ||
-                empty(get_config('tool_oauth2owncloud', 'path')) ||
-                empty(get_config('tool_oauth2owncloud', 'protocol'))) {
+            empty(get_config('tool_oauth2owncloud', 'secret')) ||
+            empty(get_config('tool_oauth2owncloud', 'server')) ||
+            empty(get_config('tool_oauth2owncloud', 'path')) ||
+            empty(get_config('tool_oauth2owncloud', 'protocol'))) {
 
                                                                      global $CFG, $OUTPUT;
             $link = $CFG->wwwroot.'/'.$CFG->admin.'/settings.php?section=oauth2owncloud';
