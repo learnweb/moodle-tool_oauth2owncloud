@@ -47,43 +47,45 @@ class owncloud extends \oauth2_client {
      * Create the ownCloud OAuth 2.0 and WebDAV clients. The required data for both clients is fetched from the
      * oauth2owncloud admin settings entered before by the user.
      *
-     * @param   string      $key        The API key
-     * @param   string      $secret     The API secret
      * @param   \moodle_url      $callback   The callback URL
      */
     public function __construct($callback) {
-        parent::__construct(get_config('tool_oauth2owncloud', 'clientid'),
-            get_config('tool_oauth2owncloud', 'secret'), $callback, '');
+        $server = get_config('tool_oauth2owncloud', 'server');
+        $clientid = get_config('tool_oauth2owncloud', 'clientid');
+        $secret = get_config('tool_oauth2owncloud', 'secret');
+        $protocol = get_config('tool_oauth2owncloud', 'protocol');
+        $port = get_config('tool_oauth2owncloud', 'port');
+        $path = get_config('tool_oauth2owncloud', 'path');
 
-        if (empty(get_config('tool_oauth2owncloud', 'server'))) {
+        parent::__construct($clientid, $secret, $callback, '');
+
+        if (empty($server)) {
             return;
         }
-        if ('http' == (get_config('tool_oauth2owncloud', 'protocol'))) {
+        if ('http' == $protocol) {
             $this->webdavtype = '';
         } else {
             $this->webdavtype = 'ssl://';
         }
-        if (empty(get_config('tool_oauth2owncloud', 'port'))) {
+        if (empty($port)) {
             if (empty($this->webdavtype)) {
                 $this->webdavport = 80;
             } else {
                 $this->webdavport = 443;
             }
         } else {
-            $this->webdavport = get_config('tool_oauth2owncloud', 'port');
+            $this->webdavport = $port;
         }
 
-        $this->dav = new owncloud_client(get_config('tool_oauth2owncloud', 'server'),
-            '', '', 'bearer', $this->webdavtype);
+        $this->dav = new owncloud_client($server, '', '', 'bearer', $this->webdavtype);
         $this->dav->port = $this->webdavport;
         $this->dav->debug = false;
 
-        $this->prefixwebdav = rtrim('/'.ltrim(get_config('tool_oauth2owncloud', 'path'), '/ '), '/ ');
+        $this->prefixwebdav = rtrim('/'.ltrim($path, '/ '), '/ ');
 
-        $p = str_replace('remote.php/webdav/', '', get_config('tool_oauth2owncloud', 'path'));
+        $p = str_replace('remote.php/webdav/', '', $path);
 
-        $this->prefixoc = get_config('tool_oauth2owncloud', 'protocol') .
-                '://' . get_config('tool_oauth2owncloud', 'server')  . '/' . $p;
+        $this->prefixoc = $protocol . '://' . $server  . '/' . $p;
     }
 
     /**
