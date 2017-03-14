@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<libraries>
+    <library>
+        <location>classes/owncloud_client.php</location>
+        <name>owncloud_client</name>
+        <license>GPL</license>
+        <version>0.1.5</version>
+        <licenseversion>3.0+</licenseversion>
+    </library>
+</libraries>
