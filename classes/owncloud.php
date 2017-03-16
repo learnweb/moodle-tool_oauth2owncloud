@@ -15,7 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * ownCloud Class for oauth2owncloud admin tool.
+ * ownCloud class for oauth2owncloud admin tool. Handles all access to ownCloud via WebDAV
+ * and the OCS Share API. Uses OAuth 2.0 as the authentication and authorization protocol.
  *
  * @package    tool_oauth2owncloud
  * @copyright  2017 Westfälische Wilhelms-Universität Münster (WWU Münster)
@@ -35,19 +36,23 @@ class owncloud extends \oauth2_client {
     /** @var null|owncloud_client webdav client which is used for webdav operations. */
     private $dav = null;
 
-    private $prefixwebdav = null;
-
+    /** @var mixed|null webdav portm, either set by the user or by a default value. */
     private $webdavport = null;
 
+    /** @var null|string type of webdav connection. Depending on the chosen protocol. */
     private $webdavtype = null;
 
+    /** @var null|string prefix for webdav paths.*/
+    private $prefixwebdav = null;
+
+    /** @var null|string prefix for paths to owncloud directories and interfaces. */
     private $prefixoc = null;
 
     /**
      * Create the ownCloud OAuth 2.0 and WebDAV clients. The required data for both clients is fetched from the
      * oauth2owncloud admin settings entered before by the user.
      *
-     * @param   \moodle_url      $callback   The callback URL
+     * @param \moodle_url $callback The callback URL, which the user gets redirected to after authorization.
      */
     public function __construct($callback) {
         $server = get_config('tool_oauth2owncloud', 'server');
@@ -59,6 +64,7 @@ class owncloud extends \oauth2_client {
 
         parent::__construct($clientid, $secret, $callback, '');
 
+        // The WebDAV attributes are set beforehand.
         if (empty($server)) {
             return;
         }
@@ -77,6 +83,7 @@ class owncloud extends \oauth2_client {
             $this->webdavport = $port;
         }
 
+        // Authentication method is set to Bearer, since we use OAuth 2.0.
         $this->dav = new owncloud_client($server, '', '', 'bearer', $this->webdavtype);
         $this->dav->port = $this->webdavport;
         $this->dav->debug = false;
@@ -103,7 +110,7 @@ class owncloud extends \oauth2_client {
             empty(get_config('tool_oauth2owncloud', 'path')) ||
             empty(get_config('tool_oauth2owncloud', 'protocol'))) {
 
-                                                                     global $CFG, $OUTPUT;
+            global $CFG, $OUTPUT;
             $link = $CFG->wwwroot.'/'.$CFG->admin.'/settings.php?section=oauth2owncloud';
 
             // Generates a link to the external admin setting page.
@@ -393,10 +400,27 @@ class owncloud extends \oauth2_client {
             $fields = explode("/s/", $xml->data[0]->url[0]);
             $fileid = $fields[1];
 
-            $ret['link'] = $this->prefixoc . 'public.php?service=files&t=' . $fileid . '&download';
+            $ret['link'] = $this->get_path('public', $fileid);
         }
 
         return $ret;
+    }
+
+    /**
+     * This method is used to generate file and folder paths to ownCloud after a successful share.
+     * Depending on the share type (public or private share), it returns the path to the shared
+     * file or folder.
+     *
+     * @param $type string either personal or private. Depending on share type.
+     * @param $id string file or folder id of the concerning content.
+     * @return bool|string returns the generated path, if $type it personal or private. Otherwise, false.
+     */
+    public function get_path($type, $id) {
+        switch ($type) {
+            case 'public': return $this->prefixoc . 'public.php?service=files&t=' . $id . '&download';
+            case 'private': return $this->prefixoc . 'index.php/apps/files/?dir=' . $id;
+            default: return false;
+        }
     }
 
     /**
