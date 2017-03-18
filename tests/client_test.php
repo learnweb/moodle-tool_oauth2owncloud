@@ -73,9 +73,9 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
     public function test_urls() {
         $this->resetAfterTest(true);
 
-        $this->assertEquals('https://localhost/owncloud/index.php/apps/oauth2/authorize',
+        $this->assertEquals('https://localhost:443/owncloud/index.php/apps/oauth2/authorize',
                 $this->get_method_owncloud('auth_url')->invokeArgs($this->client, array()));
-        $this->assertEquals('https://localhost/owncloud/index.php/apps/oauth2/api/v1/token',
+        $this->assertEquals('https://localhost:443/owncloud/index.php/apps/oauth2/api/v1/token',
                 $this->get_method_owncloud('token_url')->invokeArgs($this->client, array()));
     }
 

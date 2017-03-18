@@ -121,8 +121,7 @@ class owncloud extends \oauth2_client {
                 // Generates a link to the admin setting page.
                 echo $OUTPUT->notification('<a href="' . $link . '" target="_blank" rel="noopener noreferrer">
                                 ' . get_string('missing_settings_admin', 'tool_oauth2owncloud') . '</a>', 'warning');
-            }
-            else {
+            } else {
 
                 // Otherwise, just print a notification, bacause the current user cannot configure admin
                 // settings himself.
@@ -430,9 +429,12 @@ class owncloud extends \oauth2_client {
      */
     public function get_path($type, $id) {
         switch ($type) {
-            case 'public': return $this->prefixoc . 'public.php?service=files&t=' . $id . '&download';
-            case 'private': return $this->prefixoc . 'index.php/apps/files/?dir=' . $id;
-            default: return false;
+            case 'public':
+                return $this->prefixoc . 'public.php?service=files&t=' . $id . '&download';
+            case 'private':
+                return $this->prefixoc . 'index.php/apps/files/?dir=' . $id;
+            default:
+                return false;
         }
     }
 
