@@ -92,7 +92,7 @@ class owncloud extends \oauth2_client {
 
         $p = str_replace('remote.php/webdav/', '', $path);
 
-        $this->prefixoc = $protocol . '://' . $server  . '/' . $p;
+        $this->prefixoc = $protocol . '://' . $server . ':' . $this->webdavport . '/' . $p;
     }
 
     /**
@@ -110,12 +110,24 @@ class owncloud extends \oauth2_client {
             empty(get_config('tool_oauth2owncloud', 'path')) ||
             empty(get_config('tool_oauth2owncloud', 'protocol'))) {
 
-            global $CFG, $OUTPUT;
-            $link = $CFG->wwwroot.'/'.$CFG->admin.'/settings.php?section=oauth2owncloud';
+            $context = \context_system::instance();
 
-            // Generates a link to the external admin setting page.
-            echo $OUTPUT->notification('<a href="'.$link.'" target="_blank" rel="noopener noreferrer">
-            '.get_string('missing_settings', 'tool_oauth2owncloud').'</a>', 'warning');
+            // If the current user is a site administrator, print a link to the client settings.
+            if (has_capability('tool/oauth2owncloud:editsettings', $context)) {
+
+                global $CFG, $OUTPUT;
+                $link = $CFG->wwwroot . '/' . $CFG->admin . '/settings.php?section=oauth2owncloud';
+
+                // Generates a link to the admin setting page.
+                echo $OUTPUT->notification('<a href="' . $link . '" target="_blank" rel="noopener noreferrer">
+                                ' . get_string('missing_settings_admin', 'tool_oauth2owncloud') . '</a>', 'warning');
+            }
+            else {
+
+                // Otherwise, just print a notification, bacause the current user cannot configure admin
+                // settings himself.
+                echo $OUTPUT->notification(get_string('missing_settings_user', 'tool_oauth2owncloud'));
+            }
 
             return false;
         } else {
@@ -386,7 +398,8 @@ class owncloud extends \oauth2_client {
         }
 
         // The share request gets POSTed.
-        $response = $this->post($this->prefixoc . 'ocs/v1.php/apps/files_sharing/api/v1/shares', $query, array(), true);
+        $response = $this->post($this->prefixoc . 'ocs/v1.php/apps/files_sharing/api/v1/shares',
+                $query, array(), true);
 
         $ret = array();
 

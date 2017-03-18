@@ -26,7 +26,8 @@
 // General.
 $string['pluginname'] = 'ownCloud authentication';
 $string['owncloud:view'] = 'View a ownCloud folder';
-$string['missing_settings'] = 'Please check the required client settings. Some might be missing.';
+$string['missing_settings_admin'] = 'Please check the required client settings. Some might be missing.';
+$string['missing_settings_user'] = 'Some required ownCloud client settings are missing. Please contact your site administrator.';
 
 // Settings.
 $string['clientid'] = 'Client ID';
