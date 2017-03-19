@@ -2,7 +2,7 @@
 
 # English
 [![Build Status](https://travis-ci.org/pssl16/moodle-tool_oauth2owncloud.svg?branch=master)]
-(https://travis-ci.org/pssl16/moodle-tool_oauth2sciebo)</br>
+(https://travis-ci.org/pssl16/moodle-tool_oauth2owncloud)</br>
 This Plugin connects ownCloud with Moodle with the OAuth2 Protocol. It will later serve the following Plugins:
 [Repository sciebo](https://github.com/pssl16/moodle-repository_sciebo) and 
 [Activity Plugin CollaborativeFolders](https://github.com/pssl16/moodle-mod_collaborativefolders).

@@ -128,7 +128,6 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
         $this->assertEquals($expected, $header);
         $this->assertEquals($this->client->get_accesstoken(), null);
 
-
         $this->client->resetHeader();
 
         $this->client->set_access_token($this->accesstoken);
@@ -154,7 +153,10 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
         $this->client->set_access_token($this->accesstoken);
         try {
             $this->client->get_link('path');
-        } catch (Exception $e) {}
+        } catch (Exception $e) {
+            // An exception is thrown, bacause the response from ownCloud is empty.
+            // Since only the auth. header is tested, this exception is not relevant.
+        }
 
         $header = $this->client->header[0];
         $expected = 'Authorization: Bearer '. $this->accesstoken->token;
@@ -162,13 +164,15 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
         $this->assertEquals($expected, $header);
         $this->assertEquals($this->client->get_accesstoken(), $this->accesstoken);
 
-
         $this->client->resetHeader();
 
         $this->client->set_access_token($this->accesstoken);
         try {
             $this->client->get_link('path', $this->accesstoken->user_id);
-        } catch (Exception $e) {}
+        } catch (Exception $e) {
+            // An exception is thrown, bacause the response from ownCloud is empty.
+            // Since only the auth. header is tested, this exception is not relevant.
+        }
 
         $header = $this->client->header[0];
         $expected = 'Authorization: Bearer '. $this->accesstoken->token;
