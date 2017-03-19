@@ -76,8 +76,10 @@ class owncloud extends \oauth2_client {
         if (empty($port)) {
             if (empty($this->webdavtype)) {
                 $this->webdavport = 80;
+                set_config('port', 80, 'tool_oauth2owncloud');
             } else {
                 $this->webdavport = 443;
+                set_config('port', 443, 'tool_oauth2owncloud');
             }
         } else {
             $this->webdavport = $port;

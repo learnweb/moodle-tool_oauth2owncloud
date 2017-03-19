@@ -81,7 +81,7 @@ class owncloud_client {
     private $_cnonce = '';
     private $_nc = 0;
 
-    /** The access token for OAuth2 is safed within the WebDav client. @var null */
+    /** @var null The access token for OAuth2 is stored within the WebDav client. */
     private $_token = null;
 
     /**#@-*/
