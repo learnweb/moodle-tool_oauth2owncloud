@@ -27,10 +27,13 @@ defined('MOODLE_INTERNAL') || die();
 
 class tool_oauth2owncloud_client_testcase extends advanced_testcase {
 
+    /** @var null \tool_oauth2owncloud\owncloud OAuth 2.0 ownCloud client */
     private $client = null;
 
+    /** @var null \moodle_url dummy return URL.*/
     private $returnurl = null;
 
+    /** @var null \stdClass example Access Token. */
     private $accesstoken = null;
 
     /**
@@ -71,8 +74,52 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
     public function test_post_header() {
         $this->resetAfterTest(true);
 
+        // An Access Token is set and the cURL post method called.
         $this->client->set_access_token($this->accesstoken);
         $this->client->post('https://somepath.com/token');
+
+        // Since the method parameter auth by dafault is set to false, a basic auth.
+        // header with the client credentials is expected to be created and sent via cURL.
+        $header = $this->client->header[0];
+        $expected = 'Authorization: Basic '. base64_encode($this->client->get_clientid() .
+                        ':' . $this->client->get_clientsecret());
+
+        $this->assertEquals($expected, $header);
+        // In case of such a request, the current Access Tokens needs to be removed. This is checked
+        // in the following assertion.
+        $this->assertEquals($this->client->get_accesstoken(), null);
+
+        // Now the same method call is tested with auth set to true.
+        $this->client->resetHeader();
+
+        $this->client->set_access_token($this->accesstoken);
+        $this->client->post('https://somepath.com/token', '', array(), true);
+
+        // Since auth was set to true, the current Access Token is kept and instead of a
+        // basic auth. header a bearer auth. header, containing the given Access Token, is
+        // expected to be created.
+        $header = $this->client->header[0];
+        $expected = 'Authorization: Bearer '. $this->accesstoken->token;
+
+        // In this case the Access Token should be the same that was given to the client
+        // before the request.
+        $this->assertEquals($expected, $header);
+        $this->assertEquals($this->client->get_accesstoken(), $this->accesstoken);
+    }
+
+    /**
+     * This method tests the addition of the basic auth. header for curl requests in
+     * case of an upgrade from an Authorization Code or Refresh Token.
+     *
+     * The header assertion is the same as in test_post_header.
+     */
+    public function test_upgrade_token() {
+        $this->resetAfterTest(true);
+
+        $code = 'code';
+
+        $this->client->set_access_token($this->accesstoken);
+        $this->client->upgrade_token($code);
 
         $header = $this->client->header[0];
         $expected = 'Authorization: Basic '. base64_encode($this->client->get_clientid() .
@@ -81,16 +128,53 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
         $this->assertEquals($expected, $header);
         $this->assertEquals($this->client->get_accesstoken(), null);
 
-        $post_client = new \tool_oauth2owncloud\owncloud($this->returnurl);
 
-        $post_client->set_access_token($this->accesstoken);
+        $this->client->resetHeader();
 
-        $post_client->post('https://somepath.com/token', '', array(), true);
+        $this->client->set_access_token($this->accesstoken);
+        $this->client->upgrade_token($code, true);
 
-        $headernew = $post_client->header[0];
-        $expectednew = 'Authorization: Bearer '. $this->accesstoken->token;
+        $header = $this->client->header[0];
+        $expected = 'Authorization: Basic '. base64_encode($this->client->get_clientid() .
+                        ':' . $this->client->get_clientsecret());
 
-        $this->assertEquals($expectednew, $headernew);
+        $this->assertEquals($expected, $header);
+        $this->assertEquals($this->client->get_accesstoken(), null);
+    }
+
+    /**
+     * This method tests the addition of the bearer auth. header for curl requests in
+     * case of an OCS Share API request (generating a private or public link).
+     *
+     * The header assertion is the same as in test_post_header.
+     */
+    public function test_get_link() {
+        $this->resetAfterTest(true);
+
+        $this->client->set_access_token($this->accesstoken);
+        try {
+            $this->client->get_link('path');
+        } catch (Exception $e) {}
+
+        $header = $this->client->header[0];
+        $expected = 'Authorization: Bearer '. $this->accesstoken->token;
+
+        $this->assertEquals($expected, $header);
+        $this->assertEquals($this->client->get_accesstoken(), $this->accesstoken);
+
+
+        $this->client->resetHeader();
+
+        $this->client->set_access_token($this->accesstoken);
+        try {
+            $this->client->get_link('path', $this->accesstoken->user_id);
+        } catch (Exception $e) {}
+
+        $header = $this->client->header[0];
+        $expected = 'Authorization: Bearer '. $this->accesstoken->token;
+
+        $this->assertEquals($expected, $header);
+        $this->assertEquals($this->client->get_accesstoken(), $this->accesstoken);
     }
 
     /**
@@ -118,7 +202,7 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
         $this->resetAfterTest(true);
 
         // Since all the required data was entered at the setup, check_data should return true.
-        //$this->assertEquals($this->client->check_data(), true);
+        // $this->assertEquals($this->client->check_data(), true);
 
         $params = array(
                 'clientid' => 'testid',
@@ -131,17 +215,17 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
         // return false every time.
         foreach ($params as $key => $value) {
             unset_config($key, 'tool_oauth2owncloud');
-         //   $this->assertEquals($this->client->check_data(), false);
+            // $this->assertEquals($this->client->check_data(), false);
             set_config($key, $value, 'tool_oauth2owncloud');
         }
 
         // Now all configuration data is removed.
         unset_all_config_for_plugin('tool_oauth2owncloud');
 
-        $check_client = new \tool_oauth2owncloud\owncloud($this->returnurl);
+        // $checkclient = new \tool_oauth2owncloud\owncloud($this->returnurl);
 
         // Since no data is available, false should be returned.
-        //$this->assertEquals($check_client->check_data(), false);
+        // $this->assertEquals($checkclient->check_data(), false);
 
         foreach ($params as $key => $value) {
             set_config($key, $value, 'tool_oauth2owncloud');
@@ -149,7 +233,7 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
 
         // All parameters are now set again, except port. The port should be generated automatically
         // from a default value for each protocol type.
-        //$this->assertEquals($check_client->check_data(), true);
+        // $this->assertEquals($checkclient->check_data(), true);
     }
 
     /**
@@ -214,6 +298,24 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
         $this->assertEquals($technicalold, false);
         $this->assertEquals($this->client->get_accesstoken(), null);
         $this->assertEquals(get_config('mod_assign', 'token'), null);
+    }
+
+    /**
+     * Test the path generation of shared file and folders by the OAuth 2.0 ownCloud client.
+     */
+    public function test_get_path() {
+        $this->resetAfterTest(true);
+
+        $exampleid = '123';
+
+        $expublic = 'https://localhost:1000/owncloud/public.php?service=files&t=' . $exampleid . '&download';
+        $exprivate = 'https://localhost:1000/owncloud/index.php/apps/files/?dir=' . $exampleid;
+
+        $this->assertEquals($expublic, $this->client->get_path('public', $exampleid));
+        $this->assertEquals($exprivate, $this->client->get_path('private', $exampleid));
+
+        // Other methods than public or private are not allowed.
+        $this->assertEquals(false, $this->client->get_path('something', $exampleid));
     }
 
     /**
