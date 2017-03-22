@@ -36,6 +36,12 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
     /** @var null \stdClass example Access Token. */
     private $accesstoken = null;
 
+    private $path = '';
+
+    private $op = '';
+
+    private $auth = '';
+
     /**
      * The owncloud class is initialized and the required settings are set beforehand.
      */
@@ -66,6 +72,10 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
         $this->accesstoken->expires = $expiry;
         $this->accesstoken->user_id = 'testuser';
         $this->accesstoken->refresh_token = 'refresh';
+
+        $this->path = '/path';
+        $this->op = " /owncloud/remote.php/webdav/path HTTP/1.1";
+        $this->auth = "Authorization: Bearer example";
     }
 
     /**
@@ -156,6 +166,7 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
         } catch (Exception $e) {
             // An exception is thrown, bacause the response from ownCloud is empty.
             // Since only the auth. header is tested, this exception is not relevant.
+            echo '';
         }
 
         $header = $this->client->header[0];
@@ -172,6 +183,7 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
         } catch (Exception $e) {
             // An exception is thrown, bacause the response from ownCloud is empty.
             // Since only the auth. header is tested, this exception is not relevant.
+            echo '';
         }
 
         $header = $this->client->header[0];
@@ -244,7 +256,7 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
      * The set_access_token method of the client is tested here. This needs to be done to make sure,
      * that any further complications are not caused by this method.
      */
-    public function test_set_acces_token() {
+    public function test_set_access_token() {
         $this->resetAfterTest(true);
         // No Access Token has been set at the moment.
         $this->assertEquals($this->client->get_accesstoken(), null);
@@ -320,6 +332,127 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
 
         // Other methods than public or private are not allowed.
         $this->assertEquals(false, $this->client->get_path('something', $exampleid));
+    }
+
+    /**
+     * Test WebDAV headers after get_listing method.
+     */
+    public function test_get_listing() {
+        $this->resetAfterTest(true);
+
+        $dav = $this->prepare_dav();
+
+        $this->client->get_listing($this->path);
+
+        $header = $this->get_header($dav);
+
+        $method = "PROPFIND" . $this->op;
+
+        // The operation header is asserted.
+        $this->assertEquals($method, $header[0]);
+        // The authentication header is asserted.
+        $this->assertEquals($this->auth, $header[5]);
+    }
+
+    /**
+     * Test WebDAV headers after make_folder method.
+     */
+    public function test_make_folder() {
+        $this->resetAfterTest(true);
+
+        $dav = $this->prepare_dav();
+
+        $this->client->make_folder($this->path);
+
+        $header = $this->get_header($dav);
+
+        $method = "MKCOL" . $this->op;
+
+        $this->assertEquals($method, $header[0]);
+        $this->assertEquals($this->auth, $header[5]);
+    }
+
+    /**
+     * Test WebDAV headers after delete_folder method.
+     */
+    public function test_delete_folder() {
+        $this->resetAfterTest(true);
+
+        $dav = $this->prepare_dav();
+
+        $this->client->delete_folder($this->path);
+
+        $header = $this->get_header($dav);
+
+        $method = "DELETE" . $this->op;
+
+        $this->assertEquals($method, $header[0]);
+        $this->assertEquals($this->auth, $header[5]);
+    }
+
+    /**
+     * Test WebDAV headers after move method.
+     */
+    public function test_move() {
+        $this->resetAfterTest(true);
+
+        $dav = $this->prepare_dav();
+
+        $this->client->move($this->path, '/dest', false);
+
+        $header = $this->get_header($dav);
+
+        $method = "MOVE" . $this->op;
+        $dest = "Destination: http://example.com/owncloud/remote.php/webdav/dest";
+        $over = "Overwrite: F";
+
+        $this->assertEquals($method, $header[0]);
+        $this->assertEquals($this->auth, $header[5]);
+        // The destination header is asserted.
+        $this->assertEquals($dest, $header[6]);
+        // The overwrite header is asserted.
+        $this->assertEquals($over, $header[7]);
+    }
+
+    /**
+     * Helper method, which sets up an external WebDAV client within the OAuth 2.0 ownCloud client. It is used
+     * to access the WebDAV clients private properties via reflection.
+     *
+     * @return \tool_oauth2owncloud\owncloud_client WebDAV client, which reflection is needed.
+     * @throws \tool_oauth2owncloud\socket_exception thrown, is socket could not be opened.
+     */
+    protected function prepare_dav() {
+        $this->client->set_access_token($this->accesstoken);
+
+        $dav = new \tool_oauth2owncloud\owncloud_client('example.com', '', '', 'bearer', '');
+        $dav->port = 80;
+        $dav->debug = false;
+
+        $refclient = new ReflectionClass($this->client);
+        $private = $refclient->getProperty('dav');
+        $private->setAccessible(true);
+        $private->setValue($this->client, $dav);
+
+        if (!$this->client->open()) {
+            throw new \tool_oauth2owncloud\socket_exception(get_string('socketclosed', 'tool_oauth2owncloud'));
+        }
+
+        return $dav;
+    }
+
+    /**
+     * This method gets the header property from the given WebDAV client object. It is user to check
+     * the headers after function calls.
+     *
+     * @param $dav \tool_oauth2owncloud\owncloud_client WebDAV client, which headers need to be checked.
+     * @return mixed returns the value of the header property.
+     */
+    protected function get_header($dav) {
+        $refdav = new ReflectionClass($dav);
+        $header = $refdav->getProperty('_req');
+        $header->setAccessible(true);
+
+        return $header->getValue($dav);
     }
 
     /**

@@ -28,6 +28,7 @@ $string['pluginname'] = 'ownCloud authentication';
 $string['owncloud:view'] = 'View a ownCloud folder';
 $string['missing_settings_admin'] = 'Please check the required client settings. Some might be missing.';
 $string['missing_settings_user'] = 'Some required ownCloud client settings are missing. Please contact your site administrator.';
+$string['socketclosed'] = 'WebDAV socket could not be opened.';
 
 // Settings.
 $string['clientid'] = 'Client ID';
@@ -46,3 +47,9 @@ $string['help_server'] = 'The server address is the part of your ownCloud URL af
 $string['help_path'] = 'This is the webdav path of your ownCloud instance. Quiet likely it is remote.php/webdav but due to specific URLs it can have other prefixes.';
 $string['help_port'] = 'The Port is dependent on the protocol and individual settings of the ownCloud server. It is set to the standard of the protocol if you leave it empty.';
 $string['help_protocol'] = 'We only support http and https. You can find the protocol in the URL of your ownCloud instance.';
+
+// Exceptions.
+$string['authentication'] = ' An authentication error occurred: {$a}';
+$string['config'] = ' An error concerning the client configuration occurred: {$a}';
+$string['response'] = ' An error concerning a WebDAV response occurred: {$a}';
+$string['socket'] = ' A WebDAV socket exception occurred: {$a}';

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * version.php for oauth2owncloud admin tool
+ * Exception for authentication errors on the OAuth 2.0 ownCloud client.
  *
  * @package    tool_oauth2owncloud
  * @copyright  2017 Westfälische Wilhelms-Universität Münster (WWU Münster)
@@ -23,10 +23,18 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace tool_oauth2owncloud;
+
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'tool_oauth2owncloud'; // Full name of the plugin (used for diagnostics).
-$plugin->version   = 2017032200;            // The current plugin version (Date: YYYYMMDDXX).
-$plugin->release = 'v0.1';
-$plugin->requires  = 2016052300;            // Requires this Moodle version.
-$plugin->maturity = MATURITY_BETA;
+class authentication_exception extends \moodle_exception {
+
+    /**
+     * Constructor
+     * @param string $hint short description of problem
+     * @param string $debuginfo detailed information how to fix problem
+     */
+    function __construct($hint, $debuginfo=null) {
+        parent::__construct('authentication', 'tool_oauth2owncloud', '', $hint, $debuginfo);
+    }
+}
