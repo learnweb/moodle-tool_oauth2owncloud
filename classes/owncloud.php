@@ -102,6 +102,7 @@ class owncloud extends \oauth2_client {
      * plugin. If at least one of the settings is empty, a warning is printed with a link which redirects to the
      * external setting page of the plugin.
      *
+     * @codeCoverageIgnore
      * @return bool false, if data is missing. Otherwise, true.
      */
     public function check_data() {

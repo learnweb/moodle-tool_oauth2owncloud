@@ -34,7 +34,7 @@ class authentication_exception extends \moodle_exception {
      * @param string $hint short description of problem
      * @param string $debuginfo detailed information how to fix problem
      */
-    function __construct($hint, $debuginfo=null) {
+    public function __construct($hint, $debuginfo=null) {
         parent::__construct('authentication', 'tool_oauth2owncloud', '', $hint, $debuginfo);
     }
 }
