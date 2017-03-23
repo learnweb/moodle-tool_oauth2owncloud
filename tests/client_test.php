@@ -27,13 +27,13 @@ defined('MOODLE_INTERNAL') || die();
 
 class tool_oauth2owncloud_client_testcase extends advanced_testcase {
 
-    /** @var null \tool_oauth2owncloud\owncloud OAuth 2.0 ownCloud client */
+    /** @var null|\tool_oauth2owncloud\owncloud OAuth 2.0 ownCloud client */
     private $client = null;
 
-    /** @var null \moodle_url dummy return URL.*/
+    /** @var null|\moodle_url dummy return URL.*/
     private $returnurl = null;
 
-    /** @var null \stdClass example Access Token. */
+    /** @var null|\stdClass example Access Token. */
     private $accesstoken = null;
 
     private $path = '';
@@ -415,6 +415,15 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
     }
 
     /**
+     * Test the callback function from the owncloud class.
+     */
+    public function test_callback() {
+        $this->client->set_access_token($this->accesstoken);
+        $this->client->callback();
+        $this->assertNull($this->client->get_accesstoken());
+    }
+
+    /**
      * Helper method, which sets up an external WebDAV client within the OAuth 2.0 ownCloud client. It is used
      * to access the WebDAV clients private properties via reflection.
      *
@@ -439,6 +448,7 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
 
         return $dav;
     }
+
 
     /**
      * This method gets the header property from the given WebDAV client object. It is user to check
