@@ -89,7 +89,7 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
     public function test_construct() {
         $this->resetAfterTest(true);
 
-        // Config 'server' is empty
+        // Config 'server' is empty.
         set_config('server', null, 'tool_oauth2owncloud');
         $client = new owncloud($this->returnurl);
         $this->assertNull($this->get_property_owncloud('dav')->getValue($client));
@@ -99,13 +99,13 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
         $this->assertNull($this->get_property_owncloud('prefixoc')->getValue($client));
         set_config('server', 'localhost', 'tool_oauth2owncloud');
 
-        // Config 'protocol' is 'http'
+        // Config 'protocol' is 'http'.
         set_config('protocol', 'http', 'tool_oauth2owncloud');
         $client = new owncloud($this->returnurl);
         $this->assertEquals($this->get_property_owncloud('webdavtype')->getValue($client), '');
         set_config('protocol', null, 'tool_oauth2owncloud');
 
-        // Config 'port' is empty
+        // Config 'port' is empty.
         set_config('port', null, 'tool_oauth2owncloud');
         set_config('protocol', 'http', 'tool_oauth2owncloud');
         $client = new owncloud($this->returnurl);
@@ -117,7 +117,7 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
         $this->assertEquals($this->get_property_owncloud('webdavport')->getValue($client), 443);
         $this->assertEquals(get_config('tool_oauth2owncloud', 'port'), 443);
 
-        // Config 'port' is not empty
+        // Config 'port' is not empty.
         set_config('port', 42, 'tool_oauth2owncloud');
         $client = new owncloud($this->returnurl);
         $this->assertEquals($this->get_property_owncloud('webdavport')->getValue($client), 42);
@@ -250,51 +250,6 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
         $this->assertEquals('https://localhost:'. get_config('tool_oauth2owncloud', 'port') .
                 '/owncloud/index.php/apps/oauth2/api/v1/token',
                 $this->get_method_owncloud('token_url')->invokeArgs($this->client, array()));
-    }
-
-    /**
-     * Test for the check_data method, which should tell the user, if configuration data for
-     * the client is missing.
-     *
-     * Global variables (and methods) seem to not work with PHPUnit tests. Therefore the output
-     * of the check_data method cannot be captured properly.
-     */
-    public function test_check_data() {
-        $this->resetAfterTest(true);
-
-        // Since all the required data was entered at the setup, check_data should return true.
-        // $this->assertEquals($this->client->check_data(), true);
-
-        $params = array(
-                'clientid' => 'testid',
-                'secret' => 'testsecret',
-                'server' => 'localhost',
-                'path' => 'owncloud/remote.php/webdav/',
-                'type' => 'https');
-
-        // Now every required data field is removed individually. The check_data method should
-        // return false every time.
-        foreach ($params as $key => $value) {
-            unset_config($key, 'tool_oauth2owncloud');
-            // $this->assertEquals($this->client->check_data(), false);
-            set_config($key, $value, 'tool_oauth2owncloud');
-        }
-
-        // Now all configuration data is removed.
-        unset_all_config_for_plugin('tool_oauth2owncloud');
-
-        // $checkclient = new owncloud($this->returnurl);
-
-        // Since no data is available, false should be returned.
-        // $this->assertEquals($checkclient->check_data(), false);
-
-        foreach ($params as $key => $value) {
-            set_config($key, $value, 'tool_oauth2owncloud');
-        }
-
-        // All parameters are now set again, except port. The port should be generated automatically
-        // from a default value for each protocol type.
-        // $this->assertEquals($checkclient->check_data(), true);
     }
 
     /**
