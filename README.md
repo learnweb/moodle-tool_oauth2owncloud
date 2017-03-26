@@ -49,7 +49,7 @@ Um dieses Plugin zu aktivieren, muss der Administrator das Einstellungsformular 
 
 ![Plugin-Struktur](pix/OAuth2Form.png)
 
-Der Client ID und das Secret registrierter Clients können in ownCloud ermittelt werden (siehe [OAuth 2.0 App](https://github.com/owncloud/oauth2)).
+Die Client ID und das Secret registrierter Clients können in ownCloud ermittelt werden (siehe [OAuth 2.0 App](https://github.com/owncloud/oauth2)).
 
 ![Plugin-Struktur](pix/WebDAVForm.png)
 
