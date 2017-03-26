@@ -18,6 +18,7 @@
  * OAuth 2.0 and WebDAV API tests for the oauth2owncloud admin tool.
  *
  * @package    tool_oauth2owncloud
+ * @group      tool_oauth2owncloud
  * @copyright  2017 Westfälische Wilhelms-Universität Münster (WWU Münster)
  * @author     Projektseminar Uni Münster
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
