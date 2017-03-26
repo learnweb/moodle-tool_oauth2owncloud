@@ -25,11 +25,11 @@ The Client ID and Secret of registered clients can be found in ownCloud (see [OA
 
 ![Plugin-Struktur](pix/WebDAVForm.png)
 
-Afterwards the settings for the WebDAV client have to be filled in. This includes the ownCloud server, path and protocol. The field "port" is optional and in most cases not necessary.
+Afterwards the settings for the WebDAV client have to be filled in. This includes the ownCloud server, path and protocol. The field “port” is optional and in most cases not necessary.
 
 If all settings are correct the Admin Tool can be used for authentication and authorization via OAuth 2.0.
 
-For additional information please visit our [documentation page](https://pssl16.github.io).
+Additional information can be found in our [documentation](https://pssl16.github.io).
 
 # Deutsch
 
@@ -37,7 +37,7 @@ Dieses Plugin verbindet ownCloud und Moodle mittels des OAuth 2.0 Protokolls. Es
 * [Repository Plugin `owncloud`](https://github.com/pssl16/moodle-repository_owncloud) 
 * [Activity Module `collaborativefolders`](https://github.com/pssl16/moodle-mod_collaborativefolders)
 
-Das Plugin wurde erstellt von dem Projektseminar sciebo@Learnweb der Westfälischen Wilhelms-Universität Münster.
+Erstellt vom Projektseminar sciebo@Learnweb der Westfälischen Wilhelms-Universität Münster.
 
 ## Installation
 
@@ -53,7 +53,7 @@ Die Client ID und das Secret registrierter Clients können in ownCloud ermittelt
 
 ![Plugin-Struktur](pix/WebDAVForm.png)
 
-Danach müssen die Einstellungen für den WebDAV Client ausgefüllt werden. Dies umfasst den ownCloud Server, Path und Protocol. Das Feld „Port“ ist optional und in den meisten fälle nicht notwendig.
+Danach müssen die Einstellungen für den WebDAV Client ausgefüllt werden. Dies umfasst den ownCloud Server, Path und Protocol. Das Feld „Port“ ist optional und in den meisten Fällen nicht notwendig.
 
 Wenn alle Einstellungen korrekt sind, kann das Admin Tool für die Authentifizierung und Autorisierung via OAuth 2.0 genutzt werden.
 
