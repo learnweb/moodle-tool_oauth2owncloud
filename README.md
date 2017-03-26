@@ -17,13 +17,13 @@ Copy the content of this repository to `admin/tool/oauth2owncloud`.
 
 ## Admin Settings
 
-To enable the plugin the site admin has to fill in the settings form. This Form is available under `Website-Administration ► Plugins ► Admin tools ► ownCloud OAuth 2.0 Configuration`.
+To enable the plugin the site admin has to fill in the settings form. This form is available under `Website-Administration ► Plugins ► Admin tools ► ownCloud OAuth 2.0 Configuration`.
 
-![Plugin-Struktur](pix/OAuth2Form.png)
+![OAuth 2.0 Form](pix/OAuth2Form.png)
 
 The Client ID and Secret of registered clients can be found in ownCloud (see [OAuth 2.0 App](https://github.com/owncloud/oauth2)).
 
-![Plugin-Struktur](pix/WebDAVForm.png)
+![WebDAV Form](pix/WebDAVForm.png)
 
 Afterwards the settings for the WebDAV client have to be filled in. This includes the ownCloud server, path and protocol. The field “port” is optional and in most cases not necessary.
 
@@ -47,11 +47,11 @@ Kopieren Sie den Inhalt dieses Repositorys nach `admin/tool/oauth2owncloud`.
 
 Um dieses Plugin zu aktivieren, muss der Administrator das Einstellungsformular ausfüllen. Dieses Formular ist zu finden unter `Website-Administration ► Plugins ► Admin tools ► ownCloud OAuth 2.0 Configuration`.
 
-![Plugin-Struktur](pix/OAuth2Form.png)
+![OAuth 2.0 Formular](pix/OAuth2Form.png)
 
 Die Client ID und das Secret registrierter Clients können in ownCloud ermittelt werden (siehe [OAuth 2.0 App](https://github.com/owncloud/oauth2)).
 
-![Plugin-Struktur](pix/WebDAVForm.png)
+![WebDAV WebDAV](pix/WebDAVForm.png)
 
 Danach müssen die Einstellungen für den WebDAV Client ausgefüllt werden. Dies umfasst den ownCloud Server, Path und Protocol. Das Feld „Port“ ist optional und in den meisten Fällen nicht notwendig.
 
