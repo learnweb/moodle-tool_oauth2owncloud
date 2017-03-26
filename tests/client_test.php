@@ -89,7 +89,7 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
     public function test_construct() {
         $this->resetAfterTest(true);
 
-        // server config empty
+        // Config 'server' is empty
         set_config('server', null, 'tool_oauth2owncloud');
         $client = new owncloud($this->returnurl);
         $this->assertNull($this->get_property_owncloud('dav')->getValue($client));
@@ -99,13 +99,13 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
         $this->assertNull($this->get_property_owncloud('prefixoc')->getValue($client));
         set_config('server', 'localhost', 'tool_oauth2owncloud');
 
-        // http for protocol
+        // Config 'protocol' is 'http'
         set_config('protocol', 'http', 'tool_oauth2owncloud');
         $client = new owncloud($this->returnurl);
         $this->assertEquals($this->get_property_owncloud('webdavtype')->getValue($client), '');
         set_config('protocol', null, 'tool_oauth2owncloud');
 
-        // empty port
+        // Config 'port' is empty
         set_config('port', null, 'tool_oauth2owncloud');
         set_config('protocol', 'http', 'tool_oauth2owncloud');
         $client = new owncloud($this->returnurl);
@@ -117,7 +117,7 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
         $this->assertEquals($this->get_property_owncloud('webdavport')->getValue($client), 443);
         $this->assertEquals(get_config('tool_oauth2owncloud', 'port'), 443);
 
-        // port set
+        // Config 'port' is not empty
         set_config('port', 42, 'tool_oauth2owncloud');
         $client = new owncloud($this->returnurl);
         $this->assertEquals($this->get_property_owncloud('webdavport')->getValue($client), 42);
