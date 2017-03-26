@@ -99,7 +99,6 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
         $this->assertNull($this->get_property_owncloud('prefixoc')->getValue($client));
         set_config('server', 'localhost', 'tool_oauth2owncloud');
 
-
         // http for protocol
         set_config('protocol', 'http', 'tool_oauth2owncloud');
         $client = new owncloud($this->returnurl);
@@ -114,6 +113,7 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
         $this->assertEquals(get_config('tool_oauth2owncloud', 'port'), 80);
         set_config('port', null, 'tool_oauth2owncloud');
         set_config('protocol', null, 'tool_oauth2owncloud');
+        $client = new owncloud($this->returnurl);
         $this->assertEquals($this->get_property_owncloud('webdavport')->getValue($client), 443);
         $this->assertEquals(get_config('tool_oauth2owncloud', 'port'), 443);
 
@@ -530,10 +530,10 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
      * @return ReflectionProperty Reflection for the given property.
      */
     protected function get_property_owncloud($name) {
-        $reflectionClass = new ReflectionClass(owncloud::class);
-        $reflectionProperty = $reflectionClass->getProperty($name);
-        $reflectionProperty->setAccessible(true);
-        return $reflectionProperty;
+        $reflectionclass = new ReflectionClass(owncloud::class);
+        $reflectionproperty = $reflectionclass->getProperty($name);
+        $reflectionproperty->setAccessible(true);
+        return $reflectionproperty;
     }
 
 }
