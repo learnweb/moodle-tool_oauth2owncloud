@@ -460,6 +460,25 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
     }
 
     /**
+     * Test WebDAV headers after get_file method.
+     */
+    public function test_get_file() {
+        $this->resetAfterTest(true);
+
+        $dav = $this->prepare_dav();
+
+        $file = sprintf('%s/%s', make_request_directory(), 'file');
+        $this->client->get_file($this->path, $file);
+
+        $header = $this->get_header($dav);
+
+        $method = "GET" . $this->op;
+
+        $this->assertEquals($method, $header[0]);
+        $this->assertEquals($this->auth, $header[5]);
+    }
+
+    /**
      * Test the callback function from the owncloud class.
      */
     public function test_callback() {

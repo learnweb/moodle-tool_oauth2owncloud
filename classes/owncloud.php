@@ -36,7 +36,7 @@ class owncloud extends \oauth2_client {
     /** @var null|owncloud_client webdav client which is used for webdav operations. */
     private $dav = null;
 
-    /** @var mixed|null webdav portm, either set by the user or by a default value. */
+    /** @var mixed|null webdav port, either set by the user or by a default value. */
     private $webdavport = null;
 
     /** @var null|string type of webdav connection. Depending on the chosen protocol. */
