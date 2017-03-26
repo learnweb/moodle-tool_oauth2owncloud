@@ -13,7 +13,7 @@ Created by the project seminar sciebo@Learnweb of the University of Münster.
 
 ## Installation
 
-Place this plugin under `admin/tool/oauth2owncloud`. 
+Copy the content of this repository to `admin/tool/oauth2owncloud`. 
 
 ## Admin Settings
 
@@ -41,7 +41,7 @@ Das Plugin wurde erstellt von dem Projektseminar sciebo@Learnweb der Westfälisc
 
 ## Installation
 
-Das Plugin muss in `admin/tool/oauth2owncloud` platziert werden.
+Kopieren Sie den Inhalt dieses Repositorys nach `admin/tool/oauth2owncloud`.
 
 ## Admin Einstellungen
 
