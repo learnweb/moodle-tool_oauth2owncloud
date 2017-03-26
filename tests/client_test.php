@@ -84,6 +84,46 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
     }
 
     /**
+     * The constructor is tested with different configurations.
+     */
+    public function test_construct() {
+        $this->resetAfterTest(true);
+
+        // server config empty
+        set_config('server', null, 'tool_oauth2owncloud');
+        $client = new owncloud($this->returnurl);
+        $this->assertNull($this->get_property_owncloud('dav')->getValue($client));
+        $this->assertNull($this->get_property_owncloud('webdavport')->getValue($client));
+        $this->assertNull($this->get_property_owncloud('webdavtype')->getValue($client));
+        $this->assertNull($this->get_property_owncloud('prefixwebdav')->getValue($client));
+        $this->assertNull($this->get_property_owncloud('prefixoc')->getValue($client));
+        set_config('server', 'localhost', 'tool_oauth2owncloud');
+
+
+        // http for protocol
+        set_config('protocol', 'http', 'tool_oauth2owncloud');
+        $client = new owncloud($this->returnurl);
+        $this->assertEquals($this->get_property_owncloud('webdavtype')->getValue($client), '');
+        set_config('protocol', null, 'tool_oauth2owncloud');
+
+        // empty port
+        set_config('port', null, 'tool_oauth2owncloud');
+        set_config('protocol', 'http', 'tool_oauth2owncloud');
+        $client = new owncloud($this->returnurl);
+        $this->assertEquals($this->get_property_owncloud('webdavport')->getValue($client), 80);
+        $this->assertEquals(get_config('tool_oauth2owncloud', 'port'), 80);
+        set_config('port', null, 'tool_oauth2owncloud');
+        set_config('protocol', null, 'tool_oauth2owncloud');
+        $this->assertEquals($this->get_property_owncloud('webdavport')->getValue($client), 443);
+        $this->assertEquals(get_config('tool_oauth2owncloud', 'port'), 443);
+
+        // port set
+        set_config('port', 42, 'tool_oauth2owncloud');
+        $client = new owncloud($this->returnurl);
+        $this->assertEquals($this->get_property_owncloud('webdavport')->getValue($client), 42);
+    }
+
+    /**
      * The addition of the basic auth. header for the curl request is checked.
      */
     public function test_post_header() {
@@ -471,10 +511,10 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
     }
 
     /**
-     * Helper method to access a specific protected or private method from the class owncloud.
+     * Helper method to access a specific protected or private method of the class owncloud.
      *
-     * @param $name string name of the method.
-     * @return ReflectionMethod exact method.
+     * @param $name string Name of the method.
+     * @return ReflectionMethod Reflection for the given method.
      */
     protected function get_method_owncloud($name) {
         $tmp = new ReflectionClass(owncloud::class);
@@ -482,4 +522,18 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
         $method->setAccessible(true);
         return $method;
     }
+
+    /**
+     * Helper method to access a specific protected or private property of the class owncloud.
+     *
+     * @param $name string Name of the property.
+     * @return ReflectionProperty Reflection for the given property.
+     */
+    protected function get_property_owncloud($name) {
+        $reflectionClass = new ReflectionClass(owncloud::class);
+        $reflectionProperty = $reflectionClass->getProperty($name);
+        $reflectionProperty->setAccessible(true);
+        return $reflectionProperty;
+    }
+
 }
