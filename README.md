@@ -17,7 +17,7 @@ Copy the content of this repository to `admin/tool/oauth2owncloud`.
 
 ## Admin Settings
 
-To enable the plugin the site admin has to fill in the settings form. This form is available under `Website-Administration ► Plugins ► Admin tools ► ownCloud OAuth 2.0 Configuration`.
+To enable the plugin the site admin has to fill in the settings form. This form is available under `Site administration ► Plugins ► Admin tools ► ownCloud OAuth 2.0 Configuration`.
 
 ![OAuth 2.0 Form](pix/OAuth2Form.png)
 
@@ -45,7 +45,7 @@ Kopieren Sie den Inhalt dieses Repositorys nach `admin/tool/oauth2owncloud`.
 
 ## Admin Einstellungen
 
-Um dieses Plugin zu aktivieren, muss der Administrator das Einstellungsformular ausfüllen. Dieses Formular ist zu finden unter `Website-Administration ► Plugins ► Admin tools ► ownCloud OAuth 2.0 Configuration`.
+Um dieses Plugin zu aktivieren, muss der Administrator das Einstellungsformular ausfüllen. Dieses Formular ist zu finden unter `Site administration ► Plugins ► Admin tools ► ownCloud OAuth 2.0 Configuration`.
 
 ![OAuth 2.0 Formular](pix/OAuth2Form.png)
 
