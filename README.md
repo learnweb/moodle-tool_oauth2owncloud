@@ -9,7 +9,7 @@ This Plugin connects ownCloud with Moodle using the OAuth 2.0 protocol. It is us
 * [Repository Plugin `owncloud`](https://github.com/pssl16/moodle-repository_owncloud) 
 * [Activity Module `collaborativefolders`](https://github.com/pssl16/moodle-mod_collaborativefolders)
 
-Created by the project seminar [sciebo@Learnweb](https://github.com/pssl16) of the University of Münster.
+Created by the project seminar sciebo@Learnweb of the University of Münster.
 
 ## Installation
 
@@ -37,7 +37,7 @@ Dieses Plugin verbindet ownCloud und Moodle mittels des OAuth 2.0 Protokolls. Es
 * [Repository Plugin `owncloud`](https://github.com/pssl16/moodle-repository_owncloud) 
 * [Activity Module `collaborativefolders`](https://github.com/pssl16/moodle-mod_collaborativefolders)
 
-Das Plugin wurde erstellt von dem Projektseminar [sciebo@Learnweb](https://github.com/pssl16) der Westfälischen Wilhelms-Universität Münster.
+Das Plugin wurde erstellt von dem Projektseminar sciebo@Learnweb der Westfälischen Wilhelms-Universität Münster.
 
 ## Installation
 
