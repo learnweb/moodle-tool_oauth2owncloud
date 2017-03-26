@@ -59,4 +59,5 @@ class tool_oauth2owncloud_exceptions_testcase extends advanced_testcase {
         $this->assertEquals('tool_oauth2owncloud', $auth->module);
         $this->assertEquals('message', $auth->a);
     }
+
 }

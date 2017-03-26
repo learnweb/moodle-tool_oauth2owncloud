@@ -26,9 +26,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+use tool_oauth2owncloud\owncloud;
+use tool_oauth2owncloud\owncloud_client;
+use tool_oauth2owncloud\socket_exception;
+
 class tool_oauth2owncloud_client_testcase extends advanced_testcase {
 
-    /** @var null|\tool_oauth2owncloud\owncloud OAuth 2.0 ownCloud client */
+    /** @var null|owncloud OAuth 2.0 ownCloud client */
     private $client = null;
 
     /** @var null|\moodle_url dummy return URL.*/
@@ -64,7 +68,7 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
                 'sesskey'   => sesskey(),
         ]);
 
-        $this->client = new \tool_oauth2owncloud\owncloud($this->returnurl);
+        $this->client = new owncloud($this->returnurl);
 
         $expiry = (time() + (3600 - 10));
 
@@ -239,7 +243,7 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
         // Now all configuration data is removed.
         unset_all_config_for_plugin('tool_oauth2owncloud');
 
-        // $checkclient = new \tool_oauth2owncloud\owncloud($this->returnurl);
+        // $checkclient = new owncloud($this->returnurl);
 
         // Since no data is available, false should be returned.
         // $this->assertEquals($checkclient->check_data(), false);
@@ -428,13 +432,13 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
      * Helper method, which sets up an external WebDAV client within the OAuth 2.0 ownCloud client. It is used
      * to access the WebDAV clients private properties via reflection.
      *
-     * @return \tool_oauth2owncloud\owncloud_client WebDAV client, which reflection is needed.
-     * @throws \tool_oauth2owncloud\socket_exception thrown, is socket could not be opened.
+     * @return owncloud_client WebDAV client, which reflection is needed.
+     * @throws socket_exception thrown, is socket could not be opened.
      */
     protected function prepare_dav() {
         $this->client->set_access_token($this->accesstoken);
 
-        $dav = new \tool_oauth2owncloud\owncloud_client('example.com', '', '', 'bearer', '');
+        $dav = new owncloud_client('example.com', '', '', 'bearer', '');
         $dav->port = 80;
         $dav->debug = false;
 
@@ -444,7 +448,7 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
         $private->setValue($this->client, $dav);
 
         if (!$this->client->open()) {
-            throw new \tool_oauth2owncloud\socket_exception(get_string('socketclosed', 'tool_oauth2owncloud'));
+            throw new socket_exception(get_string('socketclosed', 'tool_oauth2owncloud'));
         }
 
         return $dav;
@@ -455,7 +459,7 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
      * This method gets the header property from the given WebDAV client object. It is user to check
      * the headers after function calls.
      *
-     * @param $dav \tool_oauth2owncloud\owncloud_client WebDAV client, which headers need to be checked.
+     * @param $dav owncloud_client WebDAV client, which headers need to be checked.
      * @return mixed returns the value of the header property.
      */
     protected function get_header($dav) {
@@ -473,7 +477,7 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
      * @return ReflectionMethod exact method.
      */
     protected function get_method_owncloud($name) {
-        $tmp = new ReflectionClass(\tool_oauth2owncloud\owncloud::class);
+        $tmp = new ReflectionClass(owncloud::class);
         $method = $tmp->getMethod($name);
         $method->setAccessible(true);
         return $method;
