@@ -58,7 +58,7 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
         set_config('secret', 'testsecret', 'tool_oauth2owncloud');
         set_config('server', 'localhost', 'tool_oauth2owncloud');
         set_config('path', 'owncloud/remote.php/webdav/', 'tool_oauth2owncloud');
-        set_config('type', 'https', 'tool_oauth2owncloud');
+        set_config('protocol', 'https', 'tool_oauth2owncloud');
         set_config('port', 1000, 'tool_oauth2owncloud');
 
         // Dummy callback URL.
@@ -121,6 +121,44 @@ class tool_oauth2owncloud_client_testcase extends advanced_testcase {
         set_config('port', 42, 'tool_oauth2owncloud');
         $client = new owncloud($this->returnurl);
         $this->assertEquals($this->get_property_owncloud('webdavport')->getValue($client), 42);
+    }
+
+    /**
+     * Test for the check_data method, which should tell the user, if configuration data for
+     * the client is missing.
+     */
+    public function test_check_data() {
+        // Since all the required data was entered at the setup, check_data should return true.
+        $this->assertTrue($this->client->check_data());
+
+        $params = array(
+                'clientid' => 'testid',
+                'secret' => 'testsecret',
+                'server' => 'localhost',
+                'path' => 'owncloud/remote.php/webdav/',
+                'protocol' => 'https');
+
+        // Now every required data field is removed individually. The check_data method should
+        // return false every time.
+        foreach ($params as $key => $value) {
+            unset_config($key, 'tool_oauth2owncloud');
+            $this->assertFalse($this->client->check_data());
+            set_config($key, $value, 'tool_oauth2owncloud');
+        }
+        // Now all configuration data is removed.
+        unset_all_config_for_plugin('tool_oauth2owncloud');
+        $checkclient = new owncloud($this->returnurl);
+
+        // Since no data is available, false should be returned.
+        $this->assertFalse($checkclient->check_data());
+
+        foreach ($params as $key => $value) {
+            set_config($key, $value, 'tool_oauth2owncloud');
+        }
+
+        // All parameters are now set again, except port. The port should be generated automatically
+        // from a default value for each protocol type.
+        $this->assertTrue($checkclient->check_data());
     }
 
     /**

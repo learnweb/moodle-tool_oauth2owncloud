@@ -99,37 +99,16 @@ class owncloud extends \oauth2_client {
 
     /**
      * Helper method, that checks the admin settings regarding the OAuth 2.0 and WebDAV clients required for this
-     * plugin. If at least one of the settings is empty, a warning is printed with a link which redirects to the
-     * external setting page of the plugin.
+     * plugin. If at least one of the settings is empty, false is returned.
      *
-     * @codeCoverageIgnore
      * @return bool false, if data is missing. Otherwise, true.
      */
     public function check_data() {
-
         if (empty(get_config('tool_oauth2owncloud', 'clientid')) ||
             empty(get_config('tool_oauth2owncloud', 'secret')) ||
             empty(get_config('tool_oauth2owncloud', 'server')) ||
             empty(get_config('tool_oauth2owncloud', 'path')) ||
             empty(get_config('tool_oauth2owncloud', 'protocol'))) {
-
-            $context = \context_system::instance();
-
-            // If the current user is a site administrator, print a link to the client settings.
-            if (has_capability('tool/oauth2owncloud:editsettings', $context)) {
-
-                global $CFG, $OUTPUT;
-                $link = $CFG->wwwroot . '/' . $CFG->admin . '/settings.php?section=oauth2owncloud';
-
-                // Generates a link to the admin setting page.
-                echo $OUTPUT->notification('<a href="' . $link . '" target="_blank" rel="noopener noreferrer">
-                                ' . get_string('missing_settings_admin', 'tool_oauth2owncloud') . '</a>', 'warning');
-            } else {
-
-                // Otherwise, just print a notification, bacause the current user cannot configure admin
-                // settings himself.
-                echo $OUTPUT->notification(get_string('missing_settings_user', 'tool_oauth2owncloud'));
-            }
 
             return false;
         } else {
@@ -183,7 +162,6 @@ class owncloud extends \oauth2_client {
      * @return bool false, if the Access Token is not valid. Otherwise, true.
      */
     public function check_login($modulename = null) {
-
         // If $modulename is null, a personal token has to be checked (current user).
         if ($modulename == null) {
 
