@@ -255,8 +255,8 @@ class owncloud extends \oauth2_client {
 
         $response = $this->post($this->token_url(), $params);
 
-        if (!$this->info['http_code'] === 200) {
-            throw new moodle_exception('Could not upgrade oauth token');
+        if ($this->info['http_code'] !== 200) {
+            throw new \moodle_exception('Could not upgrade oauth token');
         }
 
         $r = json_decode($response);
