@@ -67,7 +67,7 @@ if ($hassiteconfig) {
 
     $setting = new admin_setting_configtext('tool_oauth2owncloud/path',
         get_string('path', 'tool_oauth2owncloud'),
-        get_string('help_path', 'tool_oauth2owncloud'), ' remote.php/webdav/', PARAM_PATH, '64');
+        get_string('help_path', 'tool_oauth2owncloud'), 'remote.php/webdav/', PARAM_PATH, '64');
     $settings->add($setting);
 
     $setting = new admin_setting_configselect('tool_oauth2owncloud/protocol',
