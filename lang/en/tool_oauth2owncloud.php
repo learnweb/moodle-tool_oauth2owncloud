@@ -25,7 +25,7 @@
 
 // General.
 $string['pluginname'] = 'ownCloud authentication';
-$string['owncloud:view'] = 'View a ownCloud folder';
+$string['owncloud:view'] = 'View an ownCloud folder';
 $string['missing_settings_admin'] = 'Please check the required client settings. Some might be missing.';
 $string['missing_settings_user'] = 'Some required ownCloud client settings are missing. Please contact your site administrator.';
 $string['socketclosed'] = 'WebDAV socket could not be opened.';
@@ -33,20 +33,20 @@ $string['socketclosed'] = 'WebDAV socket could not be opened.';
 // Settings.
 $string['clientid'] = 'Client ID';
 $string['secret'] = 'Secret';
-$string['server'] = 'ownCloud Server';
+$string['server'] = 'ownCloud Host';
 $string['path'] = 'ownCloud Path';
 $string['protocol'] = 'Protocol';
 $string['port'] = 'Port';
-$string['oauthlegend'] = 'OAuth 2.0:';
+$string['oauthlegend'] = 'OAuth 2.0 Client';
 $string['oauthinfo'] = 'Settings for the OAuth 2.0 client.';
-$string['webdavlegend'] = 'WebDAV:';
-$string['webdavinfo'] = 'Settings for the WebDAV client.';
+$string['webdavlegend'] = 'ownCloud Server';
+$string['webdavinfo'] = 'Settings for both WebDAV and OAuth 2.0 clients.';
 $string['oauth2app'] = 'In order to be able to use this plugin\'s features, you need to have the {$a} installed and enabled.';
-$string['help_oauth_param'] = 'In the OAuth2 App of your ownCloud instance you can find the {$a}.';
-$string['help_server'] = 'The server address is the part of your ownCloud URL after www. until .de/.com etc.';
-$string['help_path'] = 'This is the webdav path of your ownCloud instance. Quiet likely it is remote.php/webdav but due to specific URLs it can have other prefixes.';
-$string['help_port'] = 'The Port is dependent on the protocol and individual settings of the ownCloud server. It is set to the standard of the protocol if you leave it empty.';
-$string['help_protocol'] = 'We only support http and https. You can find the protocol in the URL of your ownCloud instance.';
+$string['help_oauth_param'] = 'In the OAuth2 App of your ownCloud instance you can find the {$a} after registering this Moodle as a client.';
+$string['help_server'] = 'The hostname part of your ownCloud URL, e.g. the part after http(s):// until .de/.com';
+$string['help_path'] = 'This is the WebDAV path of your ownCloud server. Quite likely it is remote.php/webdav but if ownCloud is not installed in the webroot, it can have other prefixes.';
+$string['help_port'] = 'The port depends on the protocol and individual settings of the ownCloud server. It is set to the standard of the protocol if you leave it empty.';
+$string['help_protocol'] = 'You can identify the protocol from the URL of your ownCloud server. HTTPS is preferred for security reasons!';
 
 // Exceptions.
 $string['authentication'] = ' An authentication error occurred: {$a}';
