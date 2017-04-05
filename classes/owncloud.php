@@ -214,10 +214,17 @@ class owncloud extends \oauth2_client {
         if (isset($this->get_accesstoken()->expires) && time() >= $this->get_accesstoken()->expires) {
 
             // If the Access Token has expired and we possess a Refresh Token, a new Access Token is requested.
-            if ((isset($this->get_accesstoken()->refresh_token)) &&
-                    $this->upgrade_token($this->get_accesstoken()->refresh_token, true)) {
-                return true;
-            } else {
+            try {
+                if ((isset($this->get_accesstoken()->refresh_token)) &&
+                    $this->upgrade_token($this->get_accesstoken()->refresh_token, true)
+                ) {
+                    return true;
+                } else {
+                    $this->log_out();
+                    return false;
+                }
+            } catch (\Exception $e) {
+                // Error during upgrade_token, e.g. if access rights were revoked.
                 $this->log_out();
                 return false;
             }
