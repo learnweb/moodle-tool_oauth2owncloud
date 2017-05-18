@@ -1,3 +1,8 @@
+# Do not use in production
+Please be aware that this is a pre-release. ** Do not use in production! ** Plugins and their structure **will** be subject to change. We will **NOT** support any upgrade paths from this release.
+
+Given the new OAuth 2 API in Moodle 3.3, we believe that most of the functionality of this plugin may no longer be required. Anyway, this makes the dependency graph leaner, so that's a good thing? Any help to transition away from this plugin towards Moodle's OAuth 2 API would be greatly appreciated!! :heart:
+
 # Moodle Admin Tool `oauth2owncloud`
 
 [![Build Status](https://travis-ci.org/pssl16/moodle-tool_oauth2owncloud.svg?branch=master)](https://travis-ci.org/pssl16/moodle-tool_oauth2owncloud)
