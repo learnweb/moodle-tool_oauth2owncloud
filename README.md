@@ -1,7 +1,12 @@
 # Do not use in production
-Please be aware that this is a pre-release. ** Do not use in production! ** Plugins and their structure **will** be subject to change. We will **NOT** support any upgrade paths from this release.
 
-Given the new OAuth 2 API in Moodle 3.3, we believe that most of the functionality of this plugin may no longer be required. Anyway, this makes the dependency graph leaner, so that's a good thing? Any help to transition away from this plugin towards Moodle's OAuth 2 API would be greatly appreciated!! :heart:
+:exclamation: Word of warning: This plugin does not have production quality. It **will not be updated**, as Moodle 3.3 offers the same functionality in core (but does it better and its maintained better!).
+:warning: Please do not install this **from any vendor**, except if you are interested for historical reasons.
+:bulb: Instead, please use the all-in solution https://github.com/learnweb/moodle-repository_owncloud. It is compatible with ownCloud and Nextcloud, no extra plugins needed!
+
+Again: There is no need to use this anymore. Please refrain from installing it from us, nor from any other vendor. Moodle provides better API than we do; all newer plugins use that.
+
+
 
 # Moodle Admin Tool `oauth2owncloud`
 
