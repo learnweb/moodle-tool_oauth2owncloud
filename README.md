@@ -1,7 +1,7 @@
 # Do not use in production
 
-:exclamation: Word of warning: This plugin does not have production quality. It **will not be updated**, as Moodle 3.3 offers the same functionality in core (but does it better and its maintained better!).
-:warning: Please do not install this **from any vendor**, except if you are interested for historical reasons.
+:exclamation: Word of warning: This plugin does not have production quality. It **will not be updated**, as Moodle 3.3 offers the same functionality in core (but does it better and its maintained better!).  
+:warning: Please do not install this **from any vendor**, except if you are interested for historical reasons.  
 :bulb: Instead, please use the all-in solution https://github.com/learnweb/moodle-repository_owncloud. It is compatible with ownCloud and Nextcloud, no extra plugins needed!
 
 Again: There is no need to use this anymore. Please refrain from installing it from us, nor from any other vendor. Moodle provides better API than we do; all newer plugins use that.
